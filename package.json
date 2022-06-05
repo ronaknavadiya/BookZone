@@ -4,7 +4,8 @@
   "description": "BookZone - World of Books",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "keywords": [
     "BookZone",
@@ -16,5 +17,9 @@
     "django"
   ],
   "author": "Ronak Navadiya",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1"
+  }
 }
