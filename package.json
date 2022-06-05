@@ -1,0 +1,20 @@
+{
+  "name": "bookzone",
+  "version": "1.0.0",
+  "description": "BookZone - World of Books",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "BookZone",
+    "react",
+    "node",
+    "ml",
+    "mongodb",
+    "python",
+    "django"
+  ],
+  "author": "Ronak Navadiya",
+  "license": "ISC"
+}
