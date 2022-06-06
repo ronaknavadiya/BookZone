@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 const bodyParser = require('body-parser');
+const connectDB = require("./Database/connect")
 
 require('dotenv').config()
 const port = process.env.port || 5000;
@@ -15,6 +16,17 @@ app.get("/",(req,res)=>{
     res.status(200).send("Hello from Backend")
 })
 
-app.listen(port,()=>{
-    console.log(`Listening on port: ${port}`);
-})
+
+
+const start = async () => {
+    try {
+        await connectDB(process.env.MONGO_URI)
+            app.listen(port,()=>{
+            console.log(`Listening on port: ${port}`);
+        })
+    } catch (error) {
+        console.log("Error: ",error);
+    }
+}
+
+start();
