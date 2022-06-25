@@ -6,13 +6,13 @@ const getUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      res
+      return res
         .status(400)
         .json({ sucess: false, message: "Please provide all values.." });
     }
     const candidateUser = await Users.findOne({ email }).select("+password");
     if (!candidateUser) {
-      res.status(400).json({
+      return res.status(400).json({
         sucess: "false",
         message: "Invalid Credentials",
       });
@@ -34,7 +34,7 @@ const getUser = async (req, res) => {
     });
     candidateUser.password = undefined;
 
-    res.status(200).json({ user: candidateUser, token });
+   return  res.status(200).json({ user: candidateUser, token });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json(error.message);
