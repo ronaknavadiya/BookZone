@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
-import validator from "validator";
-import bcrypt from "bcrypt";
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -31,17 +32,43 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-UserSchema.pre("save", async () => {
-  if (!this.ismodified("password")) {
-    return;
-  }
+// UserSchema.pre("save", async function () {
+//   if (!this.ismodified("password")) {
+//     return;
+//   }
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+// });
+
+// UserSchema.methods.comparePassword = async function (candidatePassword) {
+//   const isMatch = await bcrypt.compare(candidatePassword, this.password);
+//   return isMatch;
+// };
+
+// UserSchema.methods.createJWTToken = async function () {
+//   return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
+//     expiresIn: process.env.JWT_LIFETIME,
+//   });
+// };
+
+UserSchema.pre("save", async function () {
+  // console.log(this.modifiedPaths())
+  if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-UserSchema.methods.comparePassword = async (candidatePassword) => {
-  const isMatch = await bcrypt.compare(candidatePassword, this.password);
-  return isMatch;
-};
+// UserSchema.methods.createJWT = function () {
+//   return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
+//     expiresIn: process.env.JWT_LIFETIME,
+//   });
+// };
 
-export default mongoose.model("User", UserSchema);
+// UserSchema.methods.comparePassword = async function (candidatePassword) {
+//   const isMatch = await bcrypt.compare(candidatePassword, this.password);
+//   return isMatch;
+// };
+
+// export default mongoose.model("User", UserSchema);
+const UserModel = mongoose.model("User", UserSchema);
+module.exports = UserModel;
