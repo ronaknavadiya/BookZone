@@ -34,7 +34,7 @@ const getUser = async (req, res) => {
     });
     candidateUser.password = undefined;
 
-   return  res.status(200).json({ user: candidateUser, token });
+    return res.status(200).json({ user: candidateUser, token });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json(error.message);
@@ -72,4 +72,60 @@ const createtUser = async (req, res) => {
   }
 };
 
-module.exports = { getUser, createtUser };
+const followUnfollowUser = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const { friendUserId } = req.query;
+
+    const user = await Users.findById(userId);
+    const friendUser = await Users.findById(friendUserId);
+    if (!user || !friendUser) {
+      return res
+        .status(500)
+        .json({ sucess: false, message: "Not able to find user ID" });
+    }
+
+    const isAlreadyFollowed = user.following.includes(friendUserId);
+
+    let msg = "";
+    if (isAlreadyFollowed) {
+      newFollowing = user.following.filter((uid) => uid !== friendUserId); // for current user
+      user.following = newFollowing;
+      msg = "User Unfollowed sucessfully !!";
+      newFollowers = friendUser.followers.filter((uid) => uid !== userId); // for friend
+      friendUser.followers = newFollowers;
+    } else {
+      user.following.push(friendUserId);
+      friendUser.followers.push(userId);
+      msg = "User Followed sucessfully !!";
+    }
+    Users.findByIdAndUpdate(
+      userId,
+      { following: user.following },
+      (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json(err.message);
+        }
+      }
+    );
+
+    Users.findByIdAndUpdate(
+      friendUserId,
+      { followers: friendUser.followers },
+      (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json(err.message);
+        }
+      }
+    );
+
+    return res.status(200).send(msg);
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json(error.message);
+  }
+};
+
+module.exports = { getUser, createtUser, followUnfollowUser };
