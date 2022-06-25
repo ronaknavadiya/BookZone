@@ -4,6 +4,7 @@ const cors = require("cors")
 const bodyParser = require('body-parser');
 const connectDB = require("./Database/connect")
 const authRouter = require("./Routes/auth")
+const utillsRouter = require("./Routes/Utils")
 const morgan =  require("morgan")
 require('dotenv').config()
 const port = process.env.port || 5000;
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // routes
 app.use("/api/V1/user",authRouter);
+app.use("/api/V1/user",utillsRouter)
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
