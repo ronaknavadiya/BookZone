@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+}
+:root {
+  --blue: rgba(27, 79, 114);
+}
+html {
+  font-size: calc(0.5vw + 0.5vh);
+}
+.loginpage {
+  background: linear-gradient(
+    90deg,
+    var(--blue) 50%,
+    rgba(255, 255, 255, 1) 50%
+  );
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.centerdiv {
+  height: 70vh;
+  width: 70vw;
+  background: rgb(255, 255, 255);
+  border-radius: 2rem;
+  overflow: hidden;
+}
+img {
+  object-fit: cover;
+}
+.divleft {
+  padding: 8rem;
+  padding-top: 5rem;
+  color: var(--blue);
+  letter-spacing: 0.2rem;
+}
+.head {
+  font-size: 3rem;
+  font-weight: 900;
+}
+.subhead {
+  font-size: 1.2rem;
+}
+.divleft a {
+  text-decoration: none;
+  color: var(--blue);
+  padding: 0.6rem;
+  font-weight: 900;
+}
+.divleft a:hover {
+  background-color: var(--blue);
+  border-radius: 1rem;
+  color: white;
+}
+.label {
+  letter-spacing: 0.1rem;
+
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.divleft input{
+    font-size: 1.2rem;
+    border-radius: 1.5rem;
+    padding: .5rem;
+    padding-left: 1rem;
+    border: .2rem solid rgba(229, 232, 232);
+
+}
+.divleft input:hover{
+    border: .2rem solid var(--blue);
+}
+.register {
+  font-size: 1.5rem;
+  border-radius: 1rem;
+  letter-spacing: 0.2rem;
+  padding: .5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: var(--blue);
+  color: white;
+}
