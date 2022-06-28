@@ -11,6 +11,7 @@ const port = process.env.port || 5000;
 
 
 // Middleware
+import authenticateUser from "./middleware/auth.js";
 app.use(cors())
 app.use(bodyParser.json())   // applied to access body of request object
 app.use(express.json());
