@@ -1,4 +1,4 @@
-import { DISPLAY_ALERT, CONFIGUIRE_USER } from "./actions";
+import { DISPLAY_ALERT, CONFIGUIRE_USER, LOG_OUT } from "./actions";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -10,6 +10,13 @@ const reducer = (state, action) => {
         userToken: action.payload.jwtToken,
         userId: action.payload.user._id,
         user: action.payload.user,
+      };
+    case LOG_OUT:
+      return {
+        ...state,
+        user: null,
+        userId: null,
+        userToken: null,
       };
 
     default:
