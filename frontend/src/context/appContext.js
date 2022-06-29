@@ -1,6 +1,6 @@
 import React, { useReducer, useContext } from "react";
 import reducer from "./reducer";
-import { DISPLAY_ALERT, CONFIGUIRE_USER } from "./actions";
+import { DISPLAY_ALERT, CONFIGUIRE_USER, LOG_OUT } from "./actions";
 
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
@@ -9,7 +9,7 @@ const userLocation = localStorage.getItem("location");
 const intialState = {
   isLoading: false,
   token: token,
-  user: user || {},
+  user: user || undefined,
   userLocation: userLocation || "",
 };
 
@@ -35,14 +35,21 @@ const AppProvider = ({ children }) => {
   };
 
   const setUserIDandToken = (jwtToken, user, location) => {
-    console.log(jwtToken, user);
+    // console.log(jwtToken, user);
 
     dispatch({ type: CONFIGUIRE_USER, payload: { jwtToken, user } });
     addUserToLocalStorage({ user, jwtToken, location });
   };
 
+  const logout = () => {
+    dispatch({ type: LOG_OUT });
+    removeUserFromLocalStorage();
+  };
+
   return (
-    <AppContext.Provider value={{ ...state, clearAlert, setUserIDandToken }}>
+    <AppContext.Provider
+      value={{ ...state, clearAlert, setUserIDandToken, logout }}
+    >
       {children}
     </AppContext.Provider>
   );
