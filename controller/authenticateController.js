@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt");
 
 const getUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    // console.log(req.query.email);
+    const { email, password } = req.query;
     if (!email || !password) {
       return res
         .status(400)
