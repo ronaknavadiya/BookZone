@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
+import Navbar from "./components/Navbar";
+import "./App.css";
 
 function App() {
   const data = useAppContext();
@@ -14,6 +16,7 @@ function App() {
   return (
     <>
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
