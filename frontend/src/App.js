@@ -8,6 +8,7 @@ import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import "./App.css";
+import FavouriteGenre from "./pages/FavouriteGenre";
 
 function App() {
   const data = useAppContext();
@@ -22,6 +23,7 @@ function App() {
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/signUp" element={<SignupPage />}></Route>
           <Route path="/profile" element={<UserProfile />}></Route>
+          <Route path="/favGenre" element={<FavouriteGenre />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Router>
