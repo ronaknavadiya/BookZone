@@ -18,7 +18,17 @@ const SignupPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    signUp(email.current.value, password.current.value, username.current.value);
+    try {
+      signUp(
+        email.current.value,
+        password.current.value,
+        username.current.value
+      );
+    } catch (error) {
+      toast(error);
+    }
+
+    navigate("/favGenre");
 
     // console.log(email.current.value, username, password);
   };

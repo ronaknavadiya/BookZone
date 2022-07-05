@@ -8,10 +8,12 @@ import {
   NavBtn,
   NavBtnLink,
 } from "./NavbarElements";
-import logo from "../../images/logo.png"
+import logo from "../../images/logo.png";
+import { useAppContext } from "../../context/appContext";
 
 const Navbar = () => {
-    
+  const { logout , user } = useAppContext();
+
   return (
     // <>
     //   <Nav>
@@ -32,30 +34,35 @@ const Navbar = () => {
     //     </NavBtn>
     //   </Nav>
     // </>
+
     <>
-      <Nav>
-        <NavLink to="/">
-          {/* <img src={logo} alt="logo" /> */}
-          Logo
-        </NavLink>
-        <Bars />
-        <NavMenu>
-          <NavLink to="/profile" activestyle="true">
-            My Profile
+      {user && (
+        <Nav>
+          <NavLink to="/">
+            {/* <img src={logo} alt="logo" /> */}
+            Logo
           </NavLink>
-          <NavLink to="/login" activestyle="true">
-            Log In
-          </NavLink>
-          <NavLink to="/signup" activestyle="true">
-            Sign Up
-          </NavLink>
-          {/* Second Nav */}
-          {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
-        </NavMenu>
-        <NavBtn>
-          <NavBtnLink to="/login">Log Out</NavBtnLink>
-        </NavBtn>
-      </Nav>
+          <Bars />
+          <NavMenu>
+            <NavLink to="/profile" activestyle="true">
+              My Profile
+            </NavLink>
+            <NavLink to="/login" activestyle="true">
+              Log In
+            </NavLink>
+            <NavLink to="/signup" activestyle="true">
+              Sign Up
+            </NavLink>
+            {/* Second Nav */}
+            {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
+          </NavMenu>
+          <NavBtn>
+            <NavBtnLink to="/login" onClick={logout}>
+              Log Out
+            </NavBtnLink>
+          </NavBtn>
+        </Nav>
+      )}
     </>
   );
 };
