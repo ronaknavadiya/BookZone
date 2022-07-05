@@ -20,6 +20,8 @@ const SignupPage = () => {
 
     signUp(email.current.value, password.current.value, username.current.value);
 
+    navigate("/favGenre");
+
     // console.log(email.current.value, username, password);
   };
 
