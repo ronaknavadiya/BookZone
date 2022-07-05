@@ -6,7 +6,7 @@ import Row from "react-bootstrap/Row";
 
 const BookContainer = ({ book, isSelected }) => {
   const { genre, image } = book;
-  console.log("image:", image);
+  
   return (
     <BookDiv>
       <div
