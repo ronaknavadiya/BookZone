@@ -45,6 +45,7 @@ const LoginPage = () => {
       console.log("Error: ", error);
       if (error.response.data.message) {
         toast(error.response.data.message);
+        setData({ email: "", password: "" });
       }
     }
   };

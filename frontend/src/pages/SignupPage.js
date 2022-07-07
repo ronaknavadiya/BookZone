@@ -61,6 +61,9 @@ const SignupPage = () => {
       console.log("Error: ", error.response.data.message);
       if (error.response.data.message) {
         toast(error.response.data.message);
+        email.current.value = "";
+        password.current.value = "";
+        username.current.value = "";
       }
     }
   };
