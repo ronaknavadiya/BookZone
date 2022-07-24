@@ -5,6 +5,12 @@ import image from "../images/loginpagebook.png";
 
 const UserProfile = () => {
   const [likedBooks, setLikedBooks] = useState([]);
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [mouseHoverFollowing, setMouseHoverFollowing] = useState(true);
+  const [mouseHoverFollowers, setMouseHoverFollowers] = useState(false);
+
+  const handleFollowUnfollow = () => {};
+
   useEffect(() => {
     fetchLikedBooks();
   }, []);
@@ -17,56 +23,65 @@ const UserProfile = () => {
       console.log(res.data.items);
       setLikedBooks(res.data.items);
     } catch (error) {
-      console.log("Error: ",error);
+      console.log("Error: ", error);
     }
-    
   };
   return (
     <UserProfileComp>
-      {/* <div className="container emp-profile">
-        <form>
-          <div className="row">
-            <div className="col-md-4">
-              <img src={image} alt="userImage" className="userImage" />
-            </div>
-            <div className="col-md-6">
-              <div className="profile-head">
-                <h2>User name</h2>
-                <h5>Web devs</h5>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div> */}
-
-      <div className="info-image-container">
-        <div>
+      <div className="info-image-container col-md-12">
+        <div className="col-md-1">
           <img
             src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1000&q=60"
             alt="userimage"
             className="userImage"
           />
         </div>
-        <div className="info-container">
-          <h2>Ronak Navadiya</h2>
+        <div className="info-container col-md-8">
+          <h2 className="username">Ronak Navadiya</h2>
           <div className="user-info-details">
-            <h5>40 Liked Books</h5>
-            <h5>40 Followers</h5>
-            <h5>40 Followings</h5>
+            <div className="liked-books">
+              <h4>40</h4>
+              <h5>Liked Books</h5>
+            </div>
+            <div
+              className="followers"
+              onMouseOver={() => setMouseHoverFollowers(true)}
+              onMouseOut={() => setMouseHoverFollowers(false)}
+            >
+              <h4>40</h4>
+              <h5>Followers</h5>
+            </div>
+            <div
+              className="followings"
+              onMouseOver={() => setMouseHoverFollowing(true)}
+              onMouseOut={() => setMouseHoverFollowing(false)}
+            >
+              <h4>40</h4>
+              <h5>Followings</h5>
+            </div>
           </div>
+          {/* <div> */}
+          <button
+            type="button"
+            onClick={handleFollowUnfollow}
+            className="follow-unfollow-btn"
+          >
+            {isFollowed ? "Unfollow" : "Follow"}
+          </button>
+          {/* </div> */}
         </div>
       </div>
-      <h2>Liked Books..</h2>
+      <div className="border"></div>
+      <h2 style={{ marginTop: "2rem" }}>Liked Books..</h2>
       <div className="books-galary">
-        {likedBooks.map((book)=>{
+        {likedBooks.map((book, index) => {
           return (
-            <div>
+            <div key={index}>
               <img src={book.volumeInfo.imageLinks.thumbnail} alt="" />
               <h4>{book.volumeInfo.title}</h4>
             </div>
           );
         })}
-        
       </div>
     </UserProfileComp>
   );
@@ -79,7 +94,11 @@ const UserProfileComp = styled.div`
     display: flex;
     justify-content: space-around;
     margin: 18px 0px;
-    border-bottom: 1px solid gray;
+  }
+  .border {
+    margin-top: -2px;
+    border-bottom: 1px solid #1f1209 !important;
+    box-shadow: 0 20px 20px -20px #333;
   }
   .userImage {
     width: 200px;
@@ -87,7 +106,11 @@ const UserProfileComp = styled.div`
     border-radius: 80px;
   }
   .info-container {
-    width: 50rem;
+    /* width: 50rem; */
+    align-self: center;
+    width: 50%;
+    /* justify-content: center; */
+    text-align: -webkit-center;
   }
   .user-info-details {
     display: flex;
@@ -95,9 +118,36 @@ const UserProfileComp = styled.div`
     width: 108%;
   }
   .books-galary {
+    margin-top: 2rem;
     img {
       width: 200px;
       height: 200px;
+    }
+  }
+  .username {
+    justify-self: center;
+    width: fit-content;
+    margin-top: -5rem;
+    margin-bottom: 2rem;
+    text-align: -webkit-center;
+  }
+  .follow-unfollow-btn {
+    border-radius: 4px;
+    background: var(--blue);
+    padding: 10px 22px;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    &:hover {
+      transition: all 0.2s ease-in-out;
+      background: #fff;
+      color: #010606;
+      border: 1px solid var(--blue);
     }
   }
 `;
