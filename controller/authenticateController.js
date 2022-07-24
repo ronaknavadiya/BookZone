@@ -100,7 +100,7 @@ const followUnfollowUser = async (req, res) => {
       friendUser.followers.push(userId);
       msg = "User Followed sucessfully !!";
     }
-    Users.findByIdAndUpdate(
+    await Users.findByIdAndUpdate(
       userId,
       { following: user.following },
       (err, data) => {
@@ -111,7 +111,7 @@ const followUnfollowUser = async (req, res) => {
       }
     );
 
-    Users.findByIdAndUpdate(
+    await Users.findByIdAndUpdate(
       friendUserId,
       { followers: friendUser.followers },
       (err, data) => {
