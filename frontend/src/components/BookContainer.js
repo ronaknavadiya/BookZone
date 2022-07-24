@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+
 
 const BookContainer = ({ book, isSelected }) => {
   const { genre, image } = book;
