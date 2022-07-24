@@ -66,5 +66,19 @@ const LikeBooks = async (req, res) => {
   }
 };
 
+const getSpecificUser = async (req, res) => {
+  const { userId } = req.body;
+  console.log(userId);
+  try {
+    const curreentuser = await Users.findById(userId);
+    if (curreentuser) {
+      delete curreentuser.password;
+    }
+    return res.status(200).send(curreentuser);
+  } catch (error) {
+    console.log("Error: ", error);
+    return res.status(500).json(error.message);
+  }
+};
 
-module.exports = { AddFavGenre, LikeBooks };
+module.exports = { AddFavGenre, LikeBooks, getSpecificUser };
