@@ -1,8 +1,9 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
 
 const BookCard = (book) => {
-  return (
+
+  return (  
     <div className="col-md-3 col-sm-4">
       <Link to="/book" state={{book}}>
         <div className="card bookcard">
@@ -20,6 +21,7 @@ const BookCard = (book) => {
                 ? "NA"
                 : book.book.volumeInfo.averageRating}
             </h4>
+            
           </div>
         </div>
       </Link>

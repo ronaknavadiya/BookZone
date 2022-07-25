@@ -8,3 +8,63 @@
 :root {
   --blue: rgba(27, 79, 114);
 }
+.cat{
+  width: 100px;
+  padding: 8px;
+  font-size: 12px;
+}
+.catdiv{
+  margin: 20px 0px;
+}
+
+.select1 {
+	background:white;
+	border: 1px solid rgba(27, 79, 114);
+	border-radius: 10px;
+	padding: 8px;
+	font-size: 16px;
+  width:150px;
+	color:rgba(27, 79, 114);
+
+	/* Here's the code we need */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	 -o-appearance: none;
+		appearance: none;
+}
+.option:hover{
+background-color:rgba(27, 79, 114) ;
+color: white;
+}
+
+.select-wrapper {
+	position: relative;	
+}
+
+.select-wrapper:after {
+	font-family: FontAwesome;
+  	content: '\f107';
+  	font-size: 28px;
+  	position: absolute;
+  	top: 12px;
+  	right: 20px;
+  	color: #434B67;
+  	pointer-events: none;
+}
+
+.select1::-ms-expand {
+  display: none;
+}
+
+.select1::after {
+  content: "";
+  width: 0.8em; 
+  height: 0.5em;
+  background-color: var(--select-arrow);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+} 
+.select1 {
+ 
+  display: grid;
+}
