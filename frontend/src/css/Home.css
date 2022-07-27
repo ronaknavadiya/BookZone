@@ -1,0 +1,86 @@
+:root {
+  --blue: rgba(27, 79, 114);
+  --dblue: rgba(0, 51, 102);
+}
+.search {
+  margin: 5rem;
+}
+.search input {
+  font-size: 1.7rem;
+  border-radius: 2rem;
+  padding: 1rem;
+  padding-left: 2rem;
+  border: 0.2rem solid rgba(229, 232, 232);
+}
+.search input:hover {
+  border: 0.2rem solid var(--blue);
+}
+.searchbtn {
+  font-size: 1.7rem;
+  border-radius: 0 2rem 2rem 0;
+  letter-spacing: 0.2rem;
+  padding: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border: 0.2rem solid rgba(229, 232, 232);
+  background-color: var(--blue);
+  color: white;
+}
+.books {
+  margin: 10rem;
+}
+.books img {
+  height: 35rem;
+  object-fit: fill;
+}
+.bookimg img {
+  width: 30rem;
+  height: 40rem;
+  object-fit: fill;
+  margin-bottom: 5rem;
+}
+.bookcard {
+  margin: 1rem;
+  border-radius: 2rem;
+  overflow: hidden;
+  border: none;
+  border-bottom: 0.2rem solid rgb(170, 188, 188);
+}
+.bookcard:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+.card-body h3 {
+  letter-spacing: 0.1rem;
+  font-weight: bolder;
+  color: var(--dblue);
+}
+.card-body h4 {
+  color: var(--blue);
+}
+
+.books a {
+  text-decoration: none;
+}
+
+.description {
+  margin-left: 2rem;
+}
+.bookname {
+  margin-bottom: 0.5rem;
+  font-size: 3.5rem;
+  letter-spacing: 0.3rem;
+  font-weight: bolder;
+  color: var(--dblue);
+}
+.bookauthor {
+  letter-spacing: 0.3rem;
+  font-weight: bolder;
+  color: var(--blue);
+}
+.publish {
+  font-size: 1.5rem;
+  text-align: justify;
+  letter-spacing: 0.15rem;
+  color: var(--blue);
+}
