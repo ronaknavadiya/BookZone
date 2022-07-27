@@ -68,3 +68,24 @@ color: white;
  
   display: grid;
 }
+.heart{
+  color: red;
+  font-size: 25px;
+  pointer-events: all;
+  transition:all 0.2s ease-in-out;
+ 
+}
+.heart1{
+	color: grey;
+	font-size: 25px;
+	pointer-events: all;
+	transition:all 0.2s ease-in-out;
+}
+@keyframes animate{
+	0%{
+		background-position: left;
+	}
+	100%{
+		background-position: right ;
+	}
+}

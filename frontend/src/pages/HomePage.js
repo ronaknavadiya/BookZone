@@ -1,23 +1,35 @@
 import React, { useEffect, useState, useRef, Fragment } from "react";
+import { useHistory } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { useAppContext } from "../context/appContext";
 import "../css/Home.css";
 import BookCard from "./BookCard";
+import UserProfile from "../components/Userprofile";
 const HomePage = () => {
   const { setUserIDandToken, user } = useAppContext();
   const navigate = useNavigate();
+  const search = useRef();
+  const searchcat = useRef();
+  const [recmbook, setrecmbook] = useState([]);
+  const [recmuser, setrecuser] = useState([]);
+  const [usertoggle, setusertoggle] = useState(false);
+  const [usererror,setusererror]=useState("");
+  const userprofile=(e)=>{
+    navigate
+  }
   const searching=async(e)=>{
-   
+    setusererror("");
     if(searchcat.current.value=="author"){
       try {
       
         const res = await axios.get(
           `https://www.googleapis.com/books/v1/volumes?q=inauthor:${search.current.value}`
         );
-        console.log(res.data.items);
+        
         setrecmbook(res.data.items);
+        setusertoggle(false);
       } catch (error) {
         console.log("Error: ", error);
       }
@@ -29,19 +41,96 @@ const HomePage = () => {
         const res = await axios.get(
           `https://www.googleapis.com/books/v1/volumes?q=intitle:${search.current.value}`
         );
-        console.log("data..",res.data.items);
+       
         setrecmbook(res.data.items);
+        setusertoggle(false);
       } catch (error) {
         console.log("Error: ", error);
       }
     }
+    if(searchcat.current.value=="user"){
+      try {
+       
+     
+        const res = await axios.post(
+          `http://localhost:5000/api/v1/user/usersearch`,{
+            username:search.current.value
+          }
+          
+        );
+        // navigate.push("/userprofile");
+        // setrecmbook(res.data.items);
+        if(res.data.error){
+          setusererror(res.data.error)
+        }
+        else{
+        setrecuser(res.data);
+        }
+        console.log(usererror);
+        setusertoggle(true);
+      
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+
+    }
     search.current.value="";
   }
-  const search = useRef();
-  const searchcat = useRef();
-  const [recmbook, setrecmbook] = useState([]);
+
 
   const fetchrecmbook = async () => {
+    console.log(JSON.parse(user));
+    const jsonuser=JSON.parse(user).genre;
+    const genresize=jsonuser.length;
+    console.log(genresize);
+    let reloadedvalue=0;
+    let nogenre=false;
+    let k=[];
+    if(genresize >= 5 ){
+        reloadedvalue=4;
+    }
+    else if(genresize==4){
+      reloadedvalue=5;
+    }
+    else if(genresize==3){
+      reloadedvalue=7;
+    }
+    else if(genresize==2){
+      reloadedvalue=10;
+    }
+    else if(genresize==1){
+      reloadedvalue=20;
+    }
+    else{
+      reloadedvalue=20;
+      nogenre=true;
+    }
+if(!nogenre){
+  for (let i in jsonuser) {
+    try {
+      const res = await axios.get(
+        `https://www.googleapis.com/books/v1/volumes?q=subject:${jsonuser[i]}&startIndex=0&maxResults=${reloadedvalue}`
+      );
+
+      // Object.assign({...k,res.data.items});
+     console.log(res.data.items.length);
+      for (let j in res.data.items) {
+       
+        // if(count==0){
+        //   break;
+        // }
+        // count--;
+      k.push(res.data.items[j]);
+      // console.log(res.data.items[j]);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+    
+  }
+ setrecmbook(k);
+}
+else{
     try {
       const res = await axios.get(
         "https://www.googleapis.com/books/v1/volumes?q=subject:fiction"
@@ -51,7 +140,7 @@ const HomePage = () => {
       console.log("Error: ", error);
     }
   };
-
+  }
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -84,21 +173,82 @@ const HomePage = () => {
               <select class="form-select cat  " aria-label="Disabled select example" ref={searchcat} >          
               <Option value="bookname" selected>book</Option>
     <Option value="author">author</Option>
+    <Option value="user">user</Option>
     </select>
               </div>
         </div>
       </div>
+      { !usertoggle && 
       <div className="books">
         <div className="row">
+          <Title>
+            <h2>Book suggested by genres you selected</h2>
+          </Title>
           {recmbook.map((book,index) => {
+            if(book.volumeInfo.imageLinks=== undefined?false:true){
             return (
+              
               <Fragment key={index}>
                 <BookCard  book={book}/>
               </Fragment>
+              
             );
+            }
+          })}
+        </div>
+        </div>}
+        { !usertoggle && 
+        <div className="books">
+        <div className="row">
+          <Title>
+            <h2>Book suggested by book you liked</h2>
+          </Title>
+          {recmbook.map((book,index) => {
+            if(book.volumeInfo.imageLinks=== undefined?false:true){
+            return (
+              
+              <Fragment key={index}>
+                <BookCard  book={book}/>
+              </Fragment>
+              
+            );
+            }
+          })}
+        </div>
+        </div>}
+        { !usertoggle && 
+        <div className="books">
+        <div className="row">
+          <Title>
+            <h2>Book suggested by people you follow</h2>
+          </Title>
+          {recmbook.map((book,index) => {
+            if(book.volumeInfo.imageLinks=== undefined?false:true){
+            return (
+              
+              <Fragment key={index}>
+                <BookCard  book={book}/>
+              </Fragment>
+              
+            );
+            }
           })}
         </div>
       </div>
+        }
+        { usertoggle  && recmuser.length>0 && usererror.length==0 ?
+        <div>
+        {  recmuser.map((eachuser,index)=>{
+            return(
+              <UserProfile eachuser={eachuser} onClick={userprofile}></UserProfile>
+            );
+          })}
+
+        </div>:
+        <Errorwrapper>
+          <h2>{usererror}</h2>
+        </Errorwrapper>
+        }
     </>
   );
 };
@@ -125,4 +275,18 @@ const Option=styled.option`
 
 }
 `;
+const Title=styled.div`
+margin:25px 0px;
+color: rgba(27, 79, 114);
+h2{
+  font-size: 22px;
+}
+`;
+const Errorwrapper=styled.div`
+width: 100%;
+h2{
+  text-align: center;
+  color: rgba(27, 79, 114); ;
+}
+`
 export default HomePage;

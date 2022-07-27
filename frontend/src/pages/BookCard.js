@@ -1,8 +1,15 @@
 import React,{useState} from "react";
 import { Link } from "react-router-dom";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import styled  from "styled-components";
 const BookCard = (book) => {
-
+const [heart,setheart]=useState(false);
+const heartclick=()=>{
+  setheart(!heart);
+  
+  console.log(heart);
+}
   return (  
     <div className="col-md-3 col-sm-4">
       <Link to="/book" state={{book}}>
@@ -21,6 +28,11 @@ const BookCard = (book) => {
                 ? "NA"
                 : book.book.volumeInfo.averageRating}
             </h4>
+            <Likediv>
+              <Link to="">
+            <FontAwesomeIcon className={heart ? "heart": "heart1"}  icon={faHeart} onClick={heartclick}/>
+            </Link>
+            </Likediv>
             
           </div>
         </div>
@@ -29,4 +41,8 @@ const BookCard = (book) => {
   );
 };
 
+  const Likediv=styled.div`
+  width:100%;
+  height:100%;
+  `;
 export default BookCard;
