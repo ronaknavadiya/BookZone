@@ -1,9 +1,10 @@
 import React, { useReducer, useContext } from "react";
 import reducer from "./reducer";
-import { DISPLAY_ALERT, CONFIGUIRE_USER, LOG_OUT } from "./actions";
+import { DISPLAY_ALERT, CONFIGUIRE_USER, LOG_OUT, ADD_GENRE } from "./actions";
 
 const token = localStorage.getItem("token");
-const user = localStorage.getItem("user");
+let user = localStorage.getItem("user");
+user = JSON.parse(user);
 const userLocation = localStorage.getItem("location");
 
 const intialState = {
@@ -34,6 +35,9 @@ const AppProvider = ({ children }) => {
     localStorage.removeItem("location");
   };
 
+  const addFavGenreInStorage = (genre) => {
+    dispatch({ type: ADD_GENRE, payload: { genre } });
+  };
   const setUserIDandToken = (jwtToken, user, location) => {
     // console.log(jwtToken, user);
 
@@ -48,7 +52,13 @@ const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ ...state, clearAlert, setUserIDandToken, logout }}
+      value={{
+        ...state,
+        clearAlert,
+        setUserIDandToken,
+        logout,
+        addFavGenreInStorage,
+      }}
     >
       {children}
     </AppContext.Provider>

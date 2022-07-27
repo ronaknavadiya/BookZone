@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const FavouriteGenre = () => {
-  const { user } = useAppContext();
+  const { user, addFavGenreInStorage } = useAppContext();
   const [selectedGenre, setSelectedGenre] = useState([]);
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const FavouriteGenre = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("selectedGenre: ", selectedGenre);
+    // console.log("selectedGenre: ", selectedGenre);
 
     try {
       const response = await axios.post(
@@ -33,6 +33,7 @@ const FavouriteGenre = () => {
           genre: selectedGenre,
         }
       );
+      addFavGenreInStorage(selectedGenre);
       toast("Fav genre has been saved...");
       navigate("/");
     } catch (error) {
