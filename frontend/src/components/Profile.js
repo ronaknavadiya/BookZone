@@ -1,11 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, Fragment } from "react";
 import styled from "styled-components";
 import HoverModal from "../components/HoverModal";
 import image from "../images/loginpagebook.png";
-
-const UserProfile = () => {
-  
+import {useLocation} from 'react-router-dom';
+import BookCard from "../pages/BookCard";
+const Profile = () => {
+    const location=useLocation();
+console.log(location) ; 
+const [recmbook, setrecmbook] = useState([]);
   const [likedBooks, setLikedBooks] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -36,8 +39,8 @@ const UserProfile = () => {
       const res = await axios.get(
         "https://www.googleapis.com/books/v1/volumes?q=subject:fiction"
       );
-      console.log(res.data.items);
-      setLikedBooks(res.data.items);
+      
+      setrecmbook(res.data.items);
     } catch (error) {
       console.log("Error: ", error);
     }
@@ -57,13 +60,13 @@ const UserProfile = () => {
       <div className="info-image-container col-md-12">
         <div className="col-md-1">
           <img
-            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1000&q=60"
+            src={location.state.profilePicture}
             alt="userimage"
             className="userImage"
           />
         </div>
         <div className="info-container col-md-8">
-          <h2 className="username">Ronak Navadiya</h2>
+          <h2 className="username">{location.state.userName}</h2>
           <div className="user-info-details">
             <div className="liked-books">
               <h4>40</h4>
@@ -90,22 +93,28 @@ const UserProfile = () => {
         </div>
       </div>
       <div className="border"></div>
-      <h2 style={{ marginTop: "2rem" }}>Liked Books..</h2>
-      <div className="books-galary">
-        {likedBooks.map((book, index) => {
-          return (
-            <div key={index}>
-              <img src={book.volumeInfo.imageLinks.thumbnail} alt="" />
-              <h4>{book.volumeInfo.title}</h4>
-            </div>
-          );
-        })}
-      </div>
+      
+      <div className="books">
+          <div className="row">
+            <Title>
+              <h2>Liked books</h2>
+            </Title>
+            {recmbook.map((book, index) => {
+              if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                return (
+                  <Fragment key={index}>
+                    <BookCard book={book} />
+                  </Fragment>
+                );
+              }
+            })}
+          </div>
+        </div>
     </UserProfileComp>
   );
 };
 
-export default UserProfile;
+export default Profile;
 
 const UserProfileComp = styled.div`
   .info-image-container {
@@ -174,3 +183,10 @@ const UserProfileComp = styled.div`
     top: 0;
   }
 `; 
+const Title = styled.div`
+  margin: 25px 0px;
+  color: rgba(27, 79, 114);
+  h2 {
+    font-size: 22px;
+  }
+`;
