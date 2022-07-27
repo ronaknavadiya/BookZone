@@ -9,6 +9,7 @@ import BookCard from "./BookCard";
 import UserProfile from "../components/Userprofile";
 const HomePage = () => {
   const { setUserIDandToken, user } = useAppContext();
+  // console.log("my user", user);
   const navigate = useNavigate();
   // console.log("Genre :", JSON.parse(user)["genre"][1]);
   const search = useRef();
@@ -29,6 +30,7 @@ const HomePage = () => {
         );
 
         setrecmbook(res.data.items);
+        console.log(recmbook);
         setusertoggle(false);
       } catch (error) {
         console.log("Error: ", error);
@@ -40,7 +42,11 @@ const HomePage = () => {
           `https://www.googleapis.com/books/v1/volumes?q=intitle:${search.current.value}`
         );
 
-        setrecmbook(res.data.items);
+        res.data.items === undefined
+          ? setrecmbook([])
+          : setrecmbook(res.data.items);
+
+        console.log(recmbook);
         setusertoggle(false);
       } catch (error) {
         console.log("Error: ", error);
@@ -71,10 +77,10 @@ const HomePage = () => {
   };
 
   const fetchrecmbook = async () => {
-    const jsonuser = JSON.parse(user).genre;
+    const jsonuser = user.genre;
     console.log(jsonuser);
     const genresize = jsonuser.length;
-    console.log(genresize);
+    // console.log(genresize);
     let reloadedvalue = 0;
     let nogenre = false;
     let k = [];
@@ -125,6 +131,10 @@ const HomePage = () => {
       }
     }
   };
+
+  useEffect(() => {
+    fetchrecmbook();
+  }, []);
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -133,7 +143,6 @@ const HomePage = () => {
     } else {
       navigate("/login");
     }
-    fetchrecmbook();
   }, [user, navigate]);
 
   return (
@@ -159,9 +168,10 @@ const HomePage = () => {
               <h4>Search by</h4>
             </H4div>
             <select
-              class="form-select cat  "
+              className="form-select cat  "
               aria-label="Disabled select example"
               ref={searchcat}
+              defaultValue={"bookname"}
             >
               <Option value="bookname" selected>
                 book
@@ -214,15 +224,16 @@ const HomePage = () => {
             <Title>
               <h2>Book suggested by people you follow</h2>
             </Title>
-            {recmbook.map((book, index) => {
-              if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                return (
-                  <Fragment key={index}>
-                    <BookCard book={book} />
-                  </Fragment>
-                );
-              }
-            })}
+            {recmbook &&
+              recmbook.map((book, index) => {
+                if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                  return (
+                    <Fragment key={index}>
+                      <BookCard book={book} />
+                    </Fragment>
+                  );
+                }
+              })}
           </div>
         </div>
       )}

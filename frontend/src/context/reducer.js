@@ -1,4 +1,4 @@
-import { DISPLAY_ALERT, CONFIGUIRE_USER, LOG_OUT } from "./actions";
+import { DISPLAY_ALERT, CONFIGUIRE_USER, LOG_OUT, ADD_GENRE } from "./actions";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -17,6 +17,13 @@ const reducer = (state, action) => {
         user: null,
         userId: null,
         userToken: null,
+      };
+    case ADD_GENRE:
+      const newUser = { ...state.user, genre: action.payload.genre };
+      console.log("my state:", newUser);  
+      return {
+        ...state,
+        user:newUser
       };
 
     default:
