@@ -78,7 +78,7 @@ const getSpecificUser = async (req, res) => {
     if (curreentuser) {
       delete curreentuser.password;
     }
-    return res.status(200).send(curreentuser);
+    return res.status(200).json(curreentuser);
   } catch (error) {
     console.log("Error: ", error);
     return res.status(500).json(error.message);
