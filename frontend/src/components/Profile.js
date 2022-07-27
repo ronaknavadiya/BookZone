@@ -3,12 +3,12 @@ import React, { useEffect, useState, useRef, Fragment } from "react";
 import styled from "styled-components";
 import HoverModal from "../components/HoverModal";
 import image from "../images/loginpagebook.png";
-import {useLocation} from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import BookCard from "../pages/BookCard";
 const Profile = () => {
-    const location=useLocation();
-console.log(location) ; 
-const [recmbook, setrecmbook] = useState([]);
+  const location = useLocation();
+  // console.log(location) ;
+  const [recmbook, setrecmbook] = useState([]);
   const [likedBooks, setLikedBooks] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -39,7 +39,7 @@ const [recmbook, setrecmbook] = useState([]);
       const res = await axios.get(
         "https://www.googleapis.com/books/v1/volumes?q=subject:fiction"
       );
-      
+
       setrecmbook(res.data.items);
     } catch (error) {
       console.log("Error: ", error);
@@ -93,23 +93,23 @@ const [recmbook, setrecmbook] = useState([]);
         </div>
       </div>
       <div className="border"></div>
-      
+
       <div className="books">
-          <div className="row">
-            <Title>
-              <h2>Liked books</h2>
-            </Title>
-            {recmbook.map((book, index) => {
-              if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                return (
-                  <Fragment key={index}>
-                    <BookCard book={book} />
-                  </Fragment>
-                );
-              }
-            })}
-          </div>
+        <div className="row">
+          <Title>
+            <h2>Liked books</h2>
+          </Title>
+          {recmbook.map((book, index) => {
+            if (book.volumeInfo.imageLinks === undefined ? false : true) {
+              return (
+                <Fragment key={index}>
+                  <BookCard book={book} />
+                </Fragment>
+              );
+            }
+          })}
         </div>
+      </div>
     </UserProfileComp>
   );
 };
@@ -158,31 +158,31 @@ const UserProfileComp = styled.div`
     margin-bottom: 2rem;
     text-align: -webkit-center;
   }
-    .follow-unfollow-btn {
-      border-radius: 4px;
-      background: var(--blue);
-      padding: 10px 22px;
-      color: #fff;
-      border: none;
-      outline: none;
-      cursor: pointer;
+  .follow-unfollow-btn {
+    border-radius: 4px;
+    background: var(--blue);
+    padding: 10px 22px;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    &:hover {
       transition: all 0.2s ease-in-out;
-      text-decoration: none;
-      font-size: 1.5rem;
-      margin-top: 2rem;
-      &:hover {
-        transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
-        border: 1px solid var(--blue);
-      }
+      background: #fff;
+      color: #010606;
+      border: 1px solid var(--blue);
     }
-  
+  }
+
   .hovermodal {
     position: absolute;
     top: 0;
   }
-`; 
+`;
 const Title = styled.div`
   margin: 25px 0px;
   color: rgba(27, 79, 114);

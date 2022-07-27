@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { useAppContext } from "../context/appContext";
 import "../css/Home.css";
 import BookCard from "./BookCard";
-import UserProfile from "../components/Userprofile";
+import UserProfile from "../components/ProfileComp";
 const HomePage = () => {
   const { setUserIDandToken, user } = useAppContext();
   // console.log("my user", user);
@@ -253,6 +253,7 @@ const HomePage = () => {
           {recmuser.map((eachuser, index) => {
             return (
               <UserProfile
+                key={index}
                 eachuser={eachuser}
                 onClick={userprofile}
               ></UserProfile>
