@@ -188,15 +188,19 @@ const HomePage = () => {
             <Title>
               <h2>Book suggested by genres you selected</h2>
             </Title>
-            {recmbook.map((book, index) => {
-              if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                return (
-                  <Fragment key={index}>
-                    <BookCard book={book} />
-                  </Fragment>
-                );
-              }
-            })}
+            {recmbook.length > 0 ? (
+              recmbook.map((book, index) => {
+                if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                  return (
+                    <Fragment key={index}>
+                      <BookCard book={book} />
+                    </Fragment>
+                  );
+                }
+              })
+            ) : (
+              <h1>"No Book Found !!"</h1>
+            )}
           </div>
         </div>
       )}
@@ -206,15 +210,19 @@ const HomePage = () => {
             <Title>
               <h2>Book suggested by book you liked</h2>
             </Title>
-            {recmbook.map((book, index) => {
-              if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                return (
-                  <Fragment key={index}>
-                    <BookCard book={book} />
-                  </Fragment>
-                );
-              }
-            })}
+            {recmbook.length > 0 ? (
+              recmbook.map((book, index) => {
+                if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                  return (
+                    <Fragment key={index}>
+                      <BookCard book={book} />
+                    </Fragment>
+                  );
+                }
+              })
+            ) : (
+              <h1>"No Book Found !!"</h1>
+            )}
           </div>
         </div>
       )}
@@ -224,7 +232,7 @@ const HomePage = () => {
             <Title>
               <h2>Book suggested by people you follow</h2>
             </Title>
-            {recmbook &&
+            {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
                 if (book.volumeInfo.imageLinks === undefined ? false : true) {
                   return (
@@ -233,7 +241,10 @@ const HomePage = () => {
                     </Fragment>
                   );
                 }
-              })}
+              })
+            ) : (
+              <h1>"No Book Found !!"</h1>
+            )}
           </div>
         </div>
       )}
