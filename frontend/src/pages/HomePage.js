@@ -8,14 +8,14 @@ import BookCard from "./BookCard";
 const HomePage = () => {
   const { setUserIDandToken, user } = useAppContext();
   const navigate = useNavigate();
-
+  console.log("Genre :", JSON.parse(user)["genre"][1]);
   const search = useRef();
   const [recmbook, setrecmbook] = useState([]);
 
   const fetchrecmbook = async () => {
     try {
       const res = await axios.get(
-        "https://www.googleapis.com/books/v1/volumes?q=subject:fiction"
+        `https://www.googleapis.com/books/v1/volumes?q=subject:fiction`
       );
       setrecmbook(res.data.items);
     } catch (error) {
@@ -52,10 +52,10 @@ const HomePage = () => {
       </div>
       <div className="books">
         <div className="row">
-          {recmbook.map((book,index) => {
+          {recmbook.map((book, index) => {
             return (
               <Fragment key={index}>
-                <BookCard  book={book}/>
+                <BookCard book={book} />
               </Fragment>
             );
           })}
