@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
+
 function Userprofile({ eachuser }) {
   const navigate = useNavigate();
   console.log(eachuser.profilePicture);
   const [isFollowed, setIsFollowed] = useState(false);
   const handleFollowUnfollow = () => {};
   const userprofile = (e) => {
-    console.log(eachuser);
+    // console.log(eachuser);
     navigate("/userprofile", { state: eachuser });
   };
   return (
