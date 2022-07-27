@@ -4,11 +4,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import "./App.css";
 import FavouriteGenre from "./pages/FavouriteGenre";
+import UserProfile from "./pages/UserProfile";
 import BookPage from "./pages/BookPage";
 
 function App() {
