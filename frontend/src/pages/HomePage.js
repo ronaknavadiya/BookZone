@@ -10,138 +10,121 @@ import UserProfile from "../components/Userprofile";
 const HomePage = () => {
   const { setUserIDandToken, user } = useAppContext();
   const navigate = useNavigate();
-  console.log("Genre :", JSON.parse(user)["genre"][1]);
+  // console.log("Genre :", JSON.parse(user)["genre"][1]);
   const search = useRef();
   const searchcat = useRef();
   const [recmbook, setrecmbook] = useState([]);
   const [recmuser, setrecuser] = useState([]);
   const [usertoggle, setusertoggle] = useState(false);
-  const [usererror,setusererror]=useState("");
-  const userprofile=(e)=>{
+  const [usererror, setusererror] = useState("");
+  const userprofile = (e) => {
     // navigate
-  }
-  const searching=async(e)=>{
+  };
+  const searching = async (e) => {
     setusererror("");
-    if(searchcat.current.value=="author"){
+    if (searchcat.current.value == "author") {
       try {
-      
         const res = await axios.get(
           `https://www.googleapis.com/books/v1/volumes?q=inauthor:${search.current.value}`
         );
-        
+
         setrecmbook(res.data.items);
         setusertoggle(false);
       } catch (error) {
         console.log("Error: ", error);
       }
     }
-    if(searchcat.current.value=="bookname"){
+    if (searchcat.current.value == "bookname") {
       try {
-       
-     
         const res = await axios.get(
           `https://www.googleapis.com/books/v1/volumes?q=intitle:${search.current.value}`
         );
-       
+
         setrecmbook(res.data.items);
         setusertoggle(false);
       } catch (error) {
         console.log("Error: ", error);
       }
     }
-    if(searchcat.current.value=="user"){
+    if (searchcat.current.value == "user") {
       try {
-       
-     
         const res = await axios.post(
-          `http://localhost:5000/api/v1/user/usersearch`,{
-            username:search.current.value
+          `http://localhost:5000/api/v1/user/usersearch`,
+          {
+            username: search.current.value,
           }
-          
         );
         // navigate.push("/userprofile");
         // setrecmbook(res.data.items);
-        if(res.data.error){
-          setusererror(res.data.error)
-        }
-        else{
-        setrecuser(res.data);
+        if (res.data.error) {
+          setusererror(res.data.error);
+        } else {
+          setrecuser(res.data);
         }
         console.log(usererror);
         setusertoggle(true);
-      
       } catch (error) {
         console.log("Error: ", error);
       }
-
     }
-    search.current.value="";
-  }
-
+    search.current.value = "";
+  };
 
   const fetchrecmbook = async () => {
-    console.log(JSON.parse(user));
-    const jsonuser=JSON.parse(user).genre;
-    const genresize=jsonuser.length;
+    const jsonuser = JSON.parse(user).genre;
+    console.log(jsonuser);
+    const genresize = jsonuser.length;
     console.log(genresize);
-    let reloadedvalue=0;
-    let nogenre=false;
-    let k=[];
-    if(genresize >= 5 ){
-        reloadedvalue=4;
+    let reloadedvalue = 0;
+    let nogenre = false;
+    let k = [];
+    if (genresize >= 5) {
+      reloadedvalue = 4;
+    } else if (genresize == 4) {
+      reloadedvalue = 5;
+    } else if (genresize == 3) {
+      reloadedvalue = 7;
+    } else if (genresize == 2) {
+      reloadedvalue = 10;
+    } else if (genresize == 1) {
+      reloadedvalue = 20;
+    } else {
+      reloadedvalue = 20;
+      nogenre = true;
     }
-    else if(genresize==4){
-      reloadedvalue=5;
-    }
-    else if(genresize==3){
-      reloadedvalue=7;
-    }
-    else if(genresize==2){
-      reloadedvalue=10;
-    }
-    else if(genresize==1){
-      reloadedvalue=20;
-    }
-    else{
-      reloadedvalue=20;
-      nogenre=true;
-    }
-if(!nogenre){
-  for (let i in jsonuser) {
-    try {
-      const res = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=subject:${jsonuser[i]}&startIndex=0&maxResults=${reloadedvalue}`
-      );
+    if (!nogenre) {
+      for (let i in jsonuser) {
+        try {
+          const res = await axios.get(
+            `https://www.googleapis.com/books/v1/volumes?q=subject:${jsonuser[i]}&startIndex=0&maxResults=${reloadedvalue}`
+          );
 
-      // Object.assign({...k,res.data.items});
-     console.log(res.data.items.length);
-      for (let j in res.data.items) {
-       
-        // if(count==0){
-        //   break;
-        // }
-        // count--;
-      k.push(res.data.items[j]);
-      // console.log(res.data.items[j]);
+          // Object.assign({...k,res.data.items});
+          console.log(res.data.items.length);
+          for (let j in res.data.items) {
+            // if(count==0){
+            //   break;
+            // }
+            // count--;
+            k.push(res.data.items[j]);
+            // console.log(res.data.items[j]);
+          }
+        } catch (error) {
+          console.log("Error: ", error);
+        }
       }
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-    
-  }
- setrecmbook(k);
-}
-else{
-    try {
-      const res = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=subject:fiction`
-      );
-      setrecmbook(res.data.items);
-    } catch (error) {
-      console.log("Error: ", error);
+      setrecmbook(k);
+    } else {
+      try {
+        const res = await axios.get(
+          `https://www.googleapis.com/books/v1/volumes?q=subject:fiction`
+        );
+        setrecmbook(res.data.items);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
     }
   };
-  }
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -159,135 +142,143 @@ else{
         <div className="row align-items-center justify-content-center">
           <div className="col-4">
             <div className="input-group">
-              <input type="text" className="form-control"  ref={search} />
+              <input type="text" className="form-control" ref={search} />
               <div className="input-group-append">
-                <button className="btn searchbtn " type="button" onClick={searching}>
+                <button
+                  className="btn searchbtn "
+                  type="button"
+                  onClick={searching}
+                >
                   Search
                 </button>
-              </div>                
               </div>
+            </div>
           </div>
           <div className="row align-items-center justify-content-center catdiv">
             <H4div>
-           <h4 >Search by</h4>
-           </H4div>
-              <select class="form-select cat  " aria-label="Disabled select example" ref={searchcat} >          
-              <Option value="bookname" selected>book</Option>
-    <Option value="author">author</Option>
-    <Option value="user">user</Option>
-    </select>
-              </div>
+              <h4>Search by</h4>
+            </H4div>
+            <select
+              class="form-select cat  "
+              aria-label="Disabled select example"
+              ref={searchcat}
+            >
+              <Option value="bookname" selected>
+                book
+              </Option>
+              <Option value="author">author</Option>
+              <Option value="user">user</Option>
+            </select>
+          </div>
         </div>
       </div>
-      { !usertoggle && 
-      <div className="books">
-        <div className="row">
-          <Title>
-            <h2>Book suggested by genres you selected</h2>
-          </Title>
-          {recmbook.map((book,index) => {
-            if(book.volumeInfo.imageLinks=== undefined?false:true){
-            return (
-              
-              <Fragment key={index}>
-                <BookCard book={book} />
-              </Fragment>
-              
-            );
-            }
-          })}
-        </div>
-        </div>}
-        { !usertoggle && 
+      {!usertoggle && (
         <div className="books">
-        <div className="row">
-          <Title>
-            <h2>Book suggested by book you liked</h2>
-          </Title>
-          {recmbook.map((book,index) => {
-            if(book.volumeInfo.imageLinks=== undefined?false:true){
-            return (
-              
-              <Fragment key={index}>
-                <BookCard  book={book}/>
-              </Fragment>
-              
-            );
-            }
-          })}
+          <div className="row">
+            <Title>
+              <h2>Book suggested by genres you selected</h2>
+            </Title>
+            {recmbook.map((book, index) => {
+              if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                return (
+                  <Fragment key={index}>
+                    <BookCard book={book} />
+                  </Fragment>
+                );
+              }
+            })}
+          </div>
         </div>
-        </div>}
-        { !usertoggle && 
+      )}
+      {!usertoggle && (
         <div className="books">
-        <div className="row">
-          <Title>
-            <h2>Book suggested by people you follow</h2>
-          </Title>
-          {recmbook.map((book,index) => {
-            if(book.volumeInfo.imageLinks=== undefined?false:true){
-            return (
-              
-              <Fragment key={index}>
-                <BookCard  book={book}/>
-              </Fragment>
-              
-            );
-            }
-          })}
+          <div className="row">
+            <Title>
+              <h2>Book suggested by book you liked</h2>
+            </Title>
+            {recmbook.map((book, index) => {
+              if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                return (
+                  <Fragment key={index}>
+                    <BookCard book={book} />
+                  </Fragment>
+                );
+              }
+            })}
+          </div>
         </div>
-      </div>
-        }
-        { usertoggle  && recmuser.length>0 && usererror.length==0 ?
+      )}
+      {!usertoggle && (
+        <div className="books">
+          <div className="row">
+            <Title>
+              <h2>Book suggested by people you follow</h2>
+            </Title>
+            {recmbook.map((book, index) => {
+              if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                return (
+                  <Fragment key={index}>
+                    <BookCard book={book} />
+                  </Fragment>
+                );
+              }
+            })}
+          </div>
+        </div>
+      )}
+      {usertoggle && recmuser.length > 0 && usererror.length == 0 ? (
         <div>
-        {  recmuser.map((eachuser,index)=>{
-            return(
-              <UserProfile eachuser={eachuser} onClick={userprofile}></UserProfile>
+          {recmuser.map((eachuser, index) => {
+            return (
+              <UserProfile
+                eachuser={eachuser}
+                onClick={userprofile}
+              ></UserProfile>
             );
           })}
-
-        </div>:
+        </div>
+      ) : (
         <Errorwrapper>
           <h2>{usererror}</h2>
         </Errorwrapper>
-        }
+      )}
     </>
   );
 };
 
-const H4div=styled.div`
-justify-content: center;
-align-items: center;
-height: 100%;
-margin: 0px 20px;
-h4{
-  text-align: center;
-}
+const H4div = styled.div`
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0px 20px;
+  h4 {
+    text-align: center;
+  }
 `;
-const Option=styled.option`
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	-ms-appearance: none;
-	 -o-appearance: none;
-		appearance: none;
+const Option = styled.option`
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
   color: rgba(27, 79, 114);
 
-&:hover{
-  color: blue;
-
-}
+  &:hover {
+    color: blue;
+  }
 `;
-const Title=styled.div`
-margin:25px 0px;
-color: rgba(27, 79, 114);
-h2{
-  font-size: 22px;
-}
+const Title = styled.div`
+  margin: 25px 0px;
+  color: rgba(27, 79, 114);
+  h2 {
+    font-size: 22px;
+  }
 `;
-const Errorwrapper=styled.div`
-width: 100%;
-h2{
-  text-align: center;
-  color: rgba(27, 79, 114); ;
-}
-`
+const Errorwrapper = styled.div`
+  width: 100%;
+  h2 {
+    text-align: center;
+    color: rgba(27, 79, 114);
+  }
+`;
 export default HomePage;
