@@ -1,15 +1,31 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import HoverModal from "../components/HoverModal";
 import image from "../images/loginpagebook.png";
 
 const UserProfile = ({eachuser}) => {
   
   const [likedBooks, setLikedBooks] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
-  const [mouseHoverFollowing, setMouseHoverFollowing] = useState(true);
-  const [mouseHoverFollowers, setMouseHoverFollowers] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({});
+  const [modalHeader, setModalHeader] = useState("Modal Header");
+
   const handleFollowUnfollow = () => {};
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
+
+  const showFollowersModal = () => {
+    handleShow();
+    setModalData({});
+    setModalHeader("Followers");
+  };
+  const showFollowingsModal = () => {
+    handleShow();
+    setModalData({});
+    setModalHeader("Followings");
+  };
 
   useEffect(() => {
     fetchLikedBooks();
@@ -28,6 +44,16 @@ const UserProfile = ({eachuser}) => {
   };
   return (
     <UserProfileComp>
+      {showModal && (
+        <HoverModal
+          className="hovermodal"
+          showModal={showModal}
+          handleClose={handleClose}
+          handleShow={handleShow}
+          modalHeader={modalHeader}
+          modalData={modalData}
+        />
+      )}
       <div className="info-image-container col-md-12">
         <div className="col-md-1">
           <img
@@ -43,24 +69,17 @@ const UserProfile = ({eachuser}) => {
               <h4>40</h4>
               <h5>Liked Books</h5>
             </div>
-            <div
-              className="followers"
-              onMouseOver={() => setMouseHoverFollowers(true)}
-              onMouseOut={() => setMouseHoverFollowers(false)}
-            >
+            <div className="followers" onClick={showFollowersModal}>
               <h4>40</h4>
               <h5>Followers</h5>
             </div>
-            <div
-              className="followings"
-              onMouseOver={() => setMouseHoverFollowing(true)}
-              onMouseOut={() => setMouseHoverFollowing(false)}
-            >
+
+            <div className="followings" onClick={showFollowingsModal}>
               <h4>40</h4>
               <h5>Followings</h5>
             </div>
           </div>
-          {/* <div> */}
+
           <button
             type="button"
             onClick={handleFollowUnfollow}
@@ -68,7 +87,6 @@ const UserProfile = ({eachuser}) => {
           >
             {isFollowed ? "Unfollow" : "Follow"}
           </button>
-          {/* </div> */}
         </div>
       </div>
       <div className="border"></div>
@@ -150,4 +168,9 @@ const UserProfileComp = styled.div`
         border: 1px solid var(--blue);
       }
     }
+  }
+  .hovermodal {
+    position: absolute;
+    top: 0;
+  }
 `;

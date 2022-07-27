@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import "./App.css";
 import FavouriteGenre from "./pages/FavouriteGenre";
 import UserProfile from "./pages/UserProfile";
+import BookPage from "./pages/BookPage";
 
 function App() {
   const data = useAppContext();
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/signUp" element={<SignupPage />}></Route>
+          <Route path="/book" element={<BookPage />}></Route>
           <Route path="/profile" element={<UserProfile />}></Route>
           <Route path="/favGenre" element={<FavouriteGenre />}></Route>
           <Route path="*" element={<NotFound />}></Route>

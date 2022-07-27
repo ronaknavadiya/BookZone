@@ -10,6 +10,7 @@ import UserProfile from "../components/Userprofile";
 const HomePage = () => {
   const { setUserIDandToken, user } = useAppContext();
   const navigate = useNavigate();
+  console.log("Genre :", JSON.parse(user)["genre"][1]);
   const search = useRef();
   const searchcat = useRef();
   const [recmbook, setrecmbook] = useState([]);
@@ -133,7 +134,7 @@ if(!nogenre){
 else{
     try {
       const res = await axios.get(
-        "https://www.googleapis.com/books/v1/volumes?q=subject:fiction"
+        `https://www.googleapis.com/books/v1/volumes?q=subject:fiction`
       );
       setrecmbook(res.data.items);
     } catch (error) {
@@ -189,7 +190,7 @@ else{
             return (
               
               <Fragment key={index}>
-                <BookCard  book={book}/>
+                <BookCard book={book} />
               </Fragment>
               
             );

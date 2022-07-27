@@ -89,3 +89,14 @@ color: white;
 		background-position: right ;
 	}
 }
+
+.modalwidth{
+  width: 30%;
+}
+.modal-content{
+  height: 300px !important;
+}
+.modal-body{
+  height: 20px;
+  width: 20px;
+}
