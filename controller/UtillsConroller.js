@@ -17,7 +17,11 @@ const AddFavGenre = async (req, res) => {
         console.log(err);
         return res.status(500).json(err.message);
       }
-    });
+    })
+      .clone()
+      .catch(function (err) {
+        console.log(err);
+      });
     return res.status(200).send("Favourite genre has been saved...");
   } catch (error) {
     console.log("Error: ", error);
