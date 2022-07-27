@@ -168,9 +168,9 @@ const UserProfileComp = styled.div`
         border: 1px solid var(--blue);
       }
     }
-  }
+  
   .hovermodal {
     position: absolute;
     top: 0;
   }
-`;
+`; 
