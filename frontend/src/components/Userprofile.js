@@ -1,14 +1,19 @@
 import React,{useState} from 'react'
 import styled from 'styled-components'
-
+import { Link, useNavigate } from "react-router-dom";
 function Userprofile({eachuser}) {
+  const navigate=useNavigate();
   console.log(eachuser.profilePicture);
     const [isFollowed, setIsFollowed] = useState(false);
     const handleFollowUnfollow = () => {};
-
+    const userprofile=(e)=>{
+      
+    console.log(eachuser);
+      navigate('/userprofile',{state:eachuser});
+    }
   return (
-    <div>
-        <Maincontainer>
+    <div onClick={userprofile}>
+        <Maincontainer >
             <Userwrapper >  
           <Imagewrapper className="col-md-1">
           <img
@@ -38,7 +43,7 @@ const Maincontainer=styled.div`
 width:50%;
 height:200px;
 margin: 20px auto;
-
+pointer-events: fill;
 box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);;
 `;
 const Userwrapper=styled.div`
@@ -46,6 +51,7 @@ display: flex;
 flex-direction: row;
 height: 100%;
 justify-content: space-between;
+pointer-events: fill;
 align-items: center;
 .follow-unfollow-btn {
       border-radius: 4px;
