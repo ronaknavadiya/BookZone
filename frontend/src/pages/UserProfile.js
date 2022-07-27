@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import image from "../images/loginpagebook.png";
 
-const UserProfile = () => {
+const UserProfile = ({eachuser}) => {
+  
   const [likedBooks, setLikedBooks] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
   const [mouseHoverFollowing, setMouseHoverFollowing] = useState(true);
   const [mouseHoverFollowers, setMouseHoverFollowers] = useState(false);
-
   const handleFollowUnfollow = () => {};
 
   useEffect(() => {
@@ -131,23 +131,23 @@ const UserProfileComp = styled.div`
     margin-bottom: 2rem;
     text-align: -webkit-center;
   }
-  .follow-unfollow-btn {
-    border-radius: 4px;
-    background: var(--blue);
-    padding: 10px 22px;
-    color: #fff;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    text-decoration: none;
-    font-size: 1.5rem;
-    margin-top: 2rem;
-    &:hover {
+    .follow-unfollow-btn {
+      border-radius: 4px;
+      background: var(--blue);
+      padding: 10px 22px;
+      color: #fff;
+      border: none;
+      outline: none;
+      cursor: pointer;
       transition: all 0.2s ease-in-out;
-      background: #fff;
-      color: #010606;
-      border: 1px solid var(--blue);
+      text-decoration: none;
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      &:hover {
+        transition: all 0.2s ease-in-out;
+        background: #fff;
+        color: #010606;
+        border: 1px solid var(--blue);
+      }
     }
-  }
 `;

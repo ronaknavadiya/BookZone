@@ -17,7 +17,7 @@ const HomePage = () => {
   const [usertoggle, setusertoggle] = useState(false);
   const [usererror,setusererror]=useState("");
   const userprofile=(e)=>{
-    navigate
+    // navigate
   }
   const searching=async(e)=>{
     setusererror("");
