@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useEffect } from "react";
 import {
   DISPLAY_ALERT,
   CONFIGUIRE_USER,
@@ -7,9 +5,8 @@ import {
   ADD_GENRE,
   UNFOLLLOW_USER,
   FOLLLOW_USER,
+  CONFIGUIRE_LATEST_USER,
 } from "./actions";
-
-
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -62,7 +59,9 @@ const reducer = (state, action) => {
         ...state,
       };
     }
-
+    case CONFIGUIRE_LATEST_USER: {
+      return { ...state, user: action.payload.user };
+    }
     default:
       throw new Error(`no such action : ${action.type}`);
   }

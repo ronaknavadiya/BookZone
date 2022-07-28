@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, useEffect } from "react";
+import React, { useReducer, useContext, useEffect, useState } from "react";
 import reducer from "./reducer";
 import {
   DISPLAY_ALERT,
@@ -7,6 +7,7 @@ import {
   ADD_GENRE,
   UNFOLLLOW_USER,
   FOLLLOW_USER,
+  CONFIGUIRE_LATEST_USER,
 } from "./actions";
 import axios from "axios";
 
@@ -26,6 +27,12 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, intialState);
+
+  const [latestUser, setLatestUser] = useState({});
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const clearAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
@@ -53,6 +60,10 @@ const AppProvider = ({ children }) => {
     addUserToLocalStorage({ user, jwtToken, location });
   };
 
+  const ModifyUser = (user) => {
+    dispatch({ type: CONFIGUIRE_LATEST_USER, payload: { user } });
+  };
+
   const logout = () => {
     dispatch({ type: LOG_OUT });
     removeUserFromLocalStorage();
@@ -67,6 +78,22 @@ const AppProvider = ({ children }) => {
     console.log("user....", user);
   };
 
+  const fetchUser = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/user/frienduser",
+        {
+          userId: user._id,
+        }
+      );
+      console.log("app context user", res.data);
+      // setLatestUser(res.data);
+      ModifyUser(res.data);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -76,6 +103,7 @@ const AppProvider = ({ children }) => {
         logout,
         addFavGenreInStorage,
         followUnfollowUser,
+        // latestUser,
       }}
     >
       {children}
