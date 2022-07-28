@@ -21,10 +21,10 @@ const HomePage = () => {
   const [usertoggle, setusertoggle] = useState(false);
   const [usererror, setusererror] = useState("");
   const [likeRecommendation, setLikeRecommendation] = useState([]);
-  const userprofile=(e,eachuser)=>{
+  const userprofile = (e, eachuser) => {
     // navigate('/userprofile',eachuser);
     console.log("clicked");
-  }
+  };
 
   const getBookBasedOnTitle = async (title) => {
     try {
@@ -39,10 +39,10 @@ const HomePage = () => {
 
   const getRecommandedBooks = async (title) => {
     try {
-      const res = await axios.post("http://localhost:5000/recommend_books", {
+      const res = await axios.post("http://localhost:7800/recommend_books", {
         title: title,
       });
-      console.log(res.data[0]);
+      console.log("recomm.", res.data[0]);
       setLikeRecommendation(res.data[0]);
       getBookBasedOnTitle(title);
     } catch (error) {
@@ -174,38 +174,37 @@ const HomePage = () => {
       navigate("/login");
     }
   }, [user, navigate]);
-  useEffect( () => {
-    const fetchData =   async()=>{
-        await fetchuser(); 
-        // console.log("fri..",frienduser);
-      }
-      fetchData()
-    }, []);
-  
-    useEffect(()=>{
-      
-      const fetchData =   async()=>{
-        await fetchLikedBooks(); 
-        // console.log("fri..",frienduser);
-      }
-      fetchData()
-    },[frienduser])
-  
-  const fetchuser=async ()=>{
-    let us="";
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchuser();
+      // console.log("fri..",frienduser);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchLikedBooks();
+      // console.log("fri..",frienduser);
+    };
+    fetchData();
+  }, [frienduser]);
+
+  const fetchuser = async () => {
+    let us = "";
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/v1/user/frienduser",{
-          userId:user._id
+        "http://localhost:5000/api/v1/user/frienduser",
+        {
+          userId: user._id,
         }
       );
       // const jsonuser=JSON.stringify
       // (res.data);
-    // setfrienduser(jsonuser);
-    console.log("data...",res.data);
-    setfrienduser(res.data)
-    
-       } catch(e){
+      // setfrienduser(jsonuser);
+      console.log("data...", res.data);
+      setfrienduser(res.data);
+    } catch (e) {
       console.log(e);
     }
     // const k=[];
@@ -216,43 +215,42 @@ const HomePage = () => {
     //         `https://www.googleapis.com/books/v1/volumes?q=subject:${us.likedBooks[i]}`
     //       );
     //         k.push(res.data)
-        
+
     //     setLikedBooks(k);
     //     console.log(likedBooks);
     //   } catch (error) {
     //     console.log("Error: ", error);
     //   }
     // }
-    }
-      
-    const fetchLikedBooks = async () => {
-     let k=[];
-     console.log(frienduser);
-        for( let i in frienduser.likedBooks) {
-          console.log(frienduser.likedBooks[i]);
-          let title = frienduser.likedBooks[i];
-          try{
-          const res = await axios.get(
-            `${title}`
-          );
-    
-            k.push(res.data);
+  };
+
+  const fetchLikedBooks = async () => {
+    let k = [];
+    console.log(frienduser);
+    for (let i in frienduser.likedBooks) {
+      // console.log(frienduser.likedBooks[i]);
+      let title = frienduser.likedBooks[i];
+      try {
+        const res = await axios.get(`${title}`);
+
+        k.push(res.data);
       } catch (error) {
         console.log("Error: ", error);
       }
-      
     }
     setLikedBooks(k);
-      console.log(k);
-    };
-    const verifylikebook1=(book)=>{
-      const mylink = frienduser.likedBooks.filter((myBook)=> myBook === book.selfLink)
-      console.log(mylink);
-      if(mylink.length>0){
-        return true;
-      }
-      return false;
+    console.log(k);
+  };
+  const verifylikebook1 = (book) => {
+    const mylink = frienduser.likedBooks.filter(
+      (myBook) => myBook === book.selfLink
+    );
+    // console.log(mylink);
+    if (mylink.length > 0) {
+      return true;
     }
+    return false;
+  };
   return (
     <>
       <div className="search">
@@ -299,10 +297,14 @@ const HomePage = () => {
             {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
                 if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                  const bool=verifylikebook1(book);
+                  const bool = verifylikebook1(book);
                   return (
                     <Fragment key={index}>
-                      <BookCard book={book} hearted={bool?'hearted':'unhearted'} user={user} />
+                      <BookCard
+                        book={book}
+                        hearted={bool ? "hearted" : "unhearted"}
+                        user={user}
+                      />
                     </Fragment>
                   );
                 }
@@ -322,10 +324,14 @@ const HomePage = () => {
             {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
                 if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                  const bool=verifylikebook1(book);
+                  const bool = verifylikebook1(book);
                   return (
                     <Fragment key={index}>
-                      <BookCard book={book}  hearted={bool?'hearted':'unhearted'}user={user} />
+                      <BookCard
+                        book={book}
+                        hearted={bool ? "hearted" : "unhearted"}
+                        user={user}
+                      />
                     </Fragment>
                   );
                 }
@@ -345,10 +351,13 @@ const HomePage = () => {
             {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
                 if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                  const bool=verifylikebook1(book);
+                  const bool = verifylikebook1(book);
                   return (
                     <Fragment key={index}>
-                      <BookCard book={book} hearted={bool?'hearted':'unhearted'} />
+                      <BookCard
+                        book={book}
+                        hearted={bool ? "hearted" : "unhearted"}
+                      />
                     </Fragment>
                   );
                 }
