@@ -9,7 +9,7 @@ import BookCard from "./BookCard";
 import UserProfile from "../components/ProfileComp";
 const HomePage = () => {
   const { setUserIDandToken, user } = useAppContext();
-  // console.log("my user", user);
+  console.log("my user", user);
   const navigate = useNavigate();
   // console.log("Genre :", JSON.parse(user)["genre"][1]);
   const search = useRef();
@@ -21,6 +21,9 @@ const HomePage = () => {
   const [usertoggle, setusertoggle] = useState(false);
   const [usererror, setusererror] = useState("");
   const [likeRecommendation, setLikeRecommendation] = useState([]);
+  const [recmdBooksBasedOnSearch, setRecmdBooksBasedOnSearch] = useState([]);
+  const [recmdBTitleAsPerSearch, setRecmdBTitleAsPerSearch] = useState([]);
+
   const userprofile = (e, eachuser) => {
     // navigate('/userprofile',eachuser);
     console.log("clicked");
@@ -28,10 +31,13 @@ const HomePage = () => {
 
   const getBookBasedOnTitle = async (title) => {
     try {
-      const res = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${title}`
-      );
-      console.log(res.data);
+      await axios
+        .get(`https://www.googleapis.com/books/v1/volumes?q=intitle:${title}`)
+        .then(async (res) => {
+          // console.log(res.data);
+          setRecmdBooksBasedOnSearch(res.data);
+          return await res?.data;
+        });
     } catch (error) {
       console.log("Error:", error);
     }
@@ -42,9 +48,25 @@ const HomePage = () => {
       const res = await axios.post("http://localhost:7800/recommend_books", {
         title: title,
       });
-      console.log("recomm.", res.data[0]);
-      setLikeRecommendation(res.data[0]);
-      getBookBasedOnTitle(title);
+      // console.log("recomm.", res.data[0]);
+      // setLikeRecommendation(...likeRecommendation, ...res.data[0]);
+      // console.log("likeRecommendation...", likeRecommendation);
+      // getBookBasedOnTitle(title);
+
+      setRecmdBTitleAsPerSearch([...res.data[0]]);
+      console.log("Search Recommendation...", recmdBTitleAsPerSearch);
+
+      if (res.data[0]?.length > 0) {
+        let recBook = [];
+        const book = await getBookBasedOnTitle(res.data[0][0]);
+        console.log(book, "...............");
+        // res.data[0].forEach(async (title) => {
+        //   const book = await getBookBasedOnTitle(title);
+        //   recBook.push(book);
+        // });
+        console.log("My all books:", recBook);
+        console.log("my booksssss.", recmdBooksBasedOnSearch);
+      }
     } catch (error) {
       console.log("Error:", error);
     }
@@ -102,7 +124,13 @@ const HomePage = () => {
         console.log("Error: ", error);
       }
     }
+    recommandBookBasedOnSearch(search.current.value);
     search.current.value = "";
+  };
+
+  const recommandBookBasedOnSearch = (searchedBook) => {
+    console.log("searched item:", searchedBook);
+    getRecommandedBooks(searchedBook);
   };
 
   const fetchrecmbook = async () => {
@@ -161,10 +189,25 @@ const HomePage = () => {
     }
   };
 
+  // MY LIKE BOOKS API FAILED
+
   useEffect(() => {
     fetchrecmbook();
-    getRecommandedBooks("1984");
+
+    // {Books based on like } //
+
+    // getRecommandedBooks("1984");
+    // console.log("my liked books", likedBooks);
+    // try {
+    //   likedBooks.forEach((book) => {
+    //     console.log("p:", book.volumeInfo.title);
+    //     getRecommandedBooks(book.volumeInfo.title);
+    //   });
+    // } catch (error) {
+    //   console.log("Erorr:", error);
+    // }
   }, []);
+
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -232,7 +275,6 @@ const HomePage = () => {
       let title = frienduser.likedBooks[i];
       try {
         const res = await axios.get(`${title}`);
-
         k.push(res.data);
       } catch (error) {
         console.log("Error: ", error);
@@ -262,7 +304,7 @@ const HomePage = () => {
                 <button
                   className="btn searchbtn "
                   type="button"
-                  onClick={searching}
+                  onClick={() => searching()}
                 >
                   Search
                 </button>
@@ -292,7 +334,7 @@ const HomePage = () => {
         <div className="books">
           <div className="row">
             <Title>
-              <h2>Book suggested by genres you selected</h2>
+              <h2>Books suggested by genres you selected</h2>
             </Title>
             {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
@@ -319,7 +361,7 @@ const HomePage = () => {
         <div className="books">
           <div className="row">
             <Title>
-              <h2>Book suggested by book you liked</h2>
+              <h2>Books suggested by book you Searched</h2>
             </Title>
             {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
@@ -346,7 +388,7 @@ const HomePage = () => {
         <div className="books">
           <div className="row">
             <Title>
-              <h2>Book suggested by people you follow</h2>
+              <h2>Books suggested by Book you liked..</h2>
             </Title>
             {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
