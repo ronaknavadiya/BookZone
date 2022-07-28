@@ -160,6 +160,28 @@ const UserProfile = () => {
             }
           })}
         </div>
+        <div className="row">
+          <Title>
+            <h2>Feedbacks</h2>
+          </Title>
+          <div className="col-8">
+            <div className="input-group">
+              <h2>Book:</h2>
+              <input type="text" className="form-control" />
+              <h2>Comment:</h2>
+              <input type="text" className="form-control" />
+              <div className="input-group-append">
+                <button
+                  className="btn searchbtn "
+                  type="button"
+                  // onClick={() => searching()}
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </UserProfileComp>
   );
