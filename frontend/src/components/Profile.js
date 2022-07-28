@@ -112,10 +112,10 @@ const Profile = () => {
       } catch (error) {
         console.log("Error: ", error);
       }
-    }
-    setLikedBooks(k);
-    console.log(k);
-  };
+      setLikedBooks(k);
+        console.log(k);
+      };
+      console.log(likedBooks);
   return (
     <UserProfileComp>
       <ToastContainer theme="dark" />
@@ -171,7 +171,8 @@ const Profile = () => {
           <Title>
             <h2>Liked books</h2>
           </Title>
-          {recmbook.map((book, index) => {
+          {likedBooks.map((book, index) => {
+          console.log(book);
             if (book.volumeInfo.imageLinks === undefined ? false : true) {
               return (
                 <Fragment key={index}>
