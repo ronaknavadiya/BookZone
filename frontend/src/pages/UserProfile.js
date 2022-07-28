@@ -166,9 +166,9 @@ const UserProfile = () => {
           </Title>
           <div className="col-8">
             <div className="input-group">
-              <h2>Book:</h2>
+              <h3 className=".mytext">Book:</h3>
               <input type="text" className="form-control" />
-              <h2>Comment:</h2>
+              <h3 className=".mytext">Comment:</h3>
               <input type="text" className="form-control" />
               <div className="input-group-append">
                 <button
@@ -256,6 +256,17 @@ const UserProfileComp = styled.div`
   .hovermodal {
     position: absolute;
     top: 0;
+  }
+  .books {
+    .row {
+      h3 {
+        margin: 1rem;
+      }
+      input {
+        margin-right: 1rem;
+        font-size: 2rem;
+      }
+    }
   }
 `;
 const Title = styled.div`
