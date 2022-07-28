@@ -96,11 +96,11 @@ const postFeedback = async (req, res) => {
         comment: comment,
       };
 
-      const newCom = curreentuser.feedbacks.push(comObj);
+      curreentuser.feedbacks.push(comObj);
 
       await Users.findByIdAndUpdate(
         userId,
-        { feedbacks: newCom },
+        { feedbacks: curreentuser.feedbacks },
         (err, data) => {
           if (err) {
             console.log(err);
