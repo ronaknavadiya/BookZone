@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import BookCard from "../pages/BookCard";
 import { toast, ToastContainer } from "react-toastify";
 import { useAppContext } from "../context/appContext";
+
 const Profile = () => {
   const location = useLocation();
   // console.log(location) ;
@@ -165,7 +166,6 @@ const Profile = () => {
           </div>
         </div>
         <div className="border"></div>
-
         <div className="books">
           <div className="row">
             <Title>

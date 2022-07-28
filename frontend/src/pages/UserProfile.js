@@ -4,7 +4,7 @@ import styled from "styled-components";
 import HoverModal from "../components/HoverModal";
 import { useAppContext } from "../context/appContext";
 import image from "../images/loginpagebook.png";
-
+import Comment from '../components/Comment'
 import BookCard from "./BookCard";
 const UserProfile = () => {
   const { setUserIDandToken, user } = useAppContext();
@@ -182,6 +182,7 @@ const UserProfile = () => {
             </div>
           </div>
         </div>
+        <Comment />
       </div>
     </UserProfileComp>
   );
@@ -204,6 +205,7 @@ const UserProfileComp = styled.div`
     width: 200px;
     height: 200px;
     border-radius: 80px;
+
   }
   .info-container {
     /* width: 50rem; */
