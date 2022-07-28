@@ -24,6 +24,8 @@ const HomePage = () => {
   const [recmdBooksBasedOnSearch, setRecmdBooksBasedOnSearch] = useState([]);
   const [recmdBTitleAsPerSearch, setRecmdBTitleAsPerSearch] = useState([]);
 
+  console.log("MY searched books ......", recmdBooksBasedOnSearch);
+
   const userprofile = (e, eachuser) => {
     // navigate('/userprofile',eachuser);
     console.log("clicked");
@@ -35,8 +37,12 @@ const HomePage = () => {
         .get(`https://www.googleapis.com/books/v1/volumes?q=intitle:${title}`)
         .then(async (res) => {
           // console.log(res.data);
-          setRecmdBooksBasedOnSearch(res.data);
-          return await res?.data;
+          setTimeout(() => {
+            let d = res.data.items[0];
+            setRecmdBooksBasedOnSearch((prevState) => {
+              return [...prevState, res.data.items[0]];
+            });
+          }, 1000);
         });
     } catch (error) {
       console.log("Error:", error);
@@ -58,12 +64,11 @@ const HomePage = () => {
 
       if (res.data[0]?.length > 0) {
         let recBook = [];
-        const book = await getBookBasedOnTitle(res.data[0][0]);
-        console.log(book, "...............");
-        // res.data[0].forEach(async (title) => {
-        //   const book = await getBookBasedOnTitle(title);
-        //   recBook.push(book);
-        // });
+        //  await getBookBasedOnTitle(res.data[0][0]);
+        res.data[0].forEach(async (title) => {
+          const book = await getBookBasedOnTitle(title);
+          recBook.push(book);
+        });
         console.log("My all books:", recBook);
         console.log("my booksssss.", recmdBooksBasedOnSearch);
       }
@@ -99,6 +104,7 @@ const HomePage = () => {
 
         console.log(recmbook);
         setusertoggle(false);
+        recommandBookBasedOnSearch(search.current.value);
       } catch (error) {
         console.log("Error: ", error);
       }
@@ -124,7 +130,7 @@ const HomePage = () => {
         console.log("Error: ", error);
       }
     }
-    recommandBookBasedOnSearch(search.current.value);
+    // recommandBookBasedOnSearch(search.current.value);
     search.current.value = "";
   };
 
@@ -363,8 +369,8 @@ const HomePage = () => {
             <Title>
               <h2>Books suggested by book you Searched</h2>
             </Title>
-            {recmbook.length > 0 ? (
-              recmbook.map((book, index) => {
+            {recmdBooksBasedOnSearch.length > 0 ? (
+              recmdBooksBasedOnSearch.map((book, index) => {
                 if (book.volumeInfo.imageLinks === undefined ? false : true) {
                   const bool = verifylikebook1(book);
                   return (
@@ -390,7 +396,7 @@ const HomePage = () => {
             <Title>
               <h2>Books suggested by Book you liked..</h2>
             </Title>
-            {recmbook.length > 0 ? (
+            {/* {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
                 if (book.volumeInfo.imageLinks === undefined ? false : true) {
                   const bool = verifylikebook1(book);
@@ -406,7 +412,8 @@ const HomePage = () => {
               })
             ) : (
               <h1>"No Book Found !!"</h1>
-            )}
+            )} */}
+            <h1>Comming Soon !!</h1>
           </div>
         </div>
       )}
