@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useRef } from "react";
 import styled from "styled-components";
 import HoverModal from "../components/HoverModal";
 import { useAppContext } from "../context/appContext";
 import image from "../images/loginpagebook.png";
-import Comment from '../components/Comment'
+import Comment from "../components/Comment";
 import BookCard from "./BookCard";
 const UserProfile = () => {
   const { setUserIDandToken, user } = useAppContext();
@@ -14,6 +14,10 @@ const UserProfile = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({});
   const [modalHeader, setModalHeader] = useState("Modal Header");
+  const bookNameInput = useRef();
+  const commentInout = useRef();
+  const [latestUser, setLatestUser] = useState();
+
   const handleFollowUnfollow = () => {};
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -96,6 +100,26 @@ const UserProfile = () => {
     setLikedBooks(k);
     console.log(k);
   };
+
+  const postFeedback = async () => {
+    const comObj = {
+      comment: commentInout.current.value,
+      book: bookNameInput.current.value,
+      userId: user._id,
+    };
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/user/feedback",
+        comObj
+      );
+      console.log("res..", res.data);
+      setLatestUser(res.data);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   return (
     <UserProfileComp>
       {showModal && (
@@ -167,14 +191,14 @@ const UserProfile = () => {
           <div className="col-8">
             <div className="input-group">
               <h3 className=".mytext">Book:</h3>
-              <input type="text" className="form-control" />
+              <input type="text" className="form-control" ref={bookNameInput} />
               <h3 className=".mytext">Comment:</h3>
-              <input type="text" className="form-control" />
+              <input type="text" className="form-control" ref={commentInout} />
               <div className="input-group-append">
                 <button
                   className="btn searchbtn "
                   type="button"
-                  // onClick={() => searching()}
+                  onClick={() => postFeedback()}
                 >
                   Submit
                 </button>
@@ -182,7 +206,13 @@ const UserProfile = () => {
             </div>
           </div>
         </div>
-        <Comment />
+        {latestUser
+          ? latestUser.feedbacks.map((comObj, index) => {
+              return <Comment comObj={comObj} key={index} />;
+            })
+          : user.feedbacks?.map((comObj, index) => {
+              return <Comment comObj={comObj} key={index} />;
+            })}
       </div>
     </UserProfileComp>
   );
@@ -205,7 +235,6 @@ const UserProfileComp = styled.div`
     width: 200px;
     height: 200px;
     border-radius: 80px;
-
   }
   .info-container {
     /* width: 50rem; */

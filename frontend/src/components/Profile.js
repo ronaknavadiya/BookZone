@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import BookCard from "../pages/BookCard";
 import { toast, ToastContainer } from "react-toastify";
 import { useAppContext } from "../context/appContext";
+import Comment from "./Comment";
 
 const Profile = () => {
   const location = useLocation();
@@ -117,77 +118,84 @@ const Profile = () => {
       console.log(k);
     }
     console.log(likedBooks);
-    return (
-      <UserProfileComp>
-        <ToastContainer theme="dark" />
-        {showModal && (
-          <HoverModal
-            className="hovermodal"
-            showModal={showModal}
-            handleClose={handleClose}
-            handleShow={handleShow}
-            modalHeader={modalHeader}
-            modalData={modalData}
+  };
+  return (
+    <UserProfileComp>
+      <ToastContainer theme="dark" />
+      {showModal && (
+        <HoverModal
+          className="hovermodal"
+          showModal={showModal}
+          handleClose={handleClose}
+          handleShow={handleShow}
+          modalHeader={modalHeader}
+          modalData={modalData}
+        />
+      )}
+      <div className="info-image-container col-md-12">
+        <div className="col-md-1">
+          <img
+            src={location.state.profilePicture}
+            alt="userimage"
+            className="userImage"
           />
-        )}
-        <div className="info-image-container col-md-12">
-          <div className="col-md-1">
-            <img
-              src={location.state.profilePicture}
-              alt="userimage"
-              className="userImage"
-            />
-          </div>
-          <div className="info-container col-md-8">
-            <h2 className="username">{location.state.userName}</h2>
-            <div className="user-info-details">
-              <div className="liked-books">
-                <h4>{location.state.likedBooks.length}</h4>
-                <h5>Liked Books</h5>
-              </div>
-              <div className="followers" onClick={showFollowersModal}>
-                <h4>{location.state.followers.length}</h4>
-                <h5>Followers</h5>
-              </div>
-
-              <div className="followings" onClick={showFollowingsModal}>
-                <h4>{location.state.following.length}</h4>
-                <h5>Followings</h5>
-              </div>
+        </div>
+        <div className="info-container col-md-8">
+          <h2 className="username">{location.state.userName}</h2>
+          <div className="user-info-details">
+            <div className="liked-books">
+              <h4>{location.state.likedBooks.length}</h4>
+              <h5>Liked Books</h5>
+            </div>
+            <div className="followers" onClick={showFollowersModal}>
+              <h4>{location.state.followers.length}</h4>
+              <h5>Followers</h5>
             </div>
 
-            <button
-              type="button"
-              onClick={handleFollowUnfollow}
-              className="follow-unfollow-btn"
-            >
-              {isFollowed ? "Unfollow" : "Follow"}
-            </button>
+            <div className="followings" onClick={showFollowingsModal}>
+              <h4>{location.state.following.length}</h4>
+              <h5>Followings</h5>
+            </div>
           </div>
-        </div>
-        <div className="border"></div>
-        <div className="books">
-          <div className="row">
-            <Title>
-              <h2>Liked books</h2>
-            </Title>
-            {likedBooks.map((book, index) => {
-              console.log(book);
-              if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                return (
-                  <Fragment key={index}>
-                    <BookCard book={book} />
-                  </Fragment>
-                );
-              }
-            })}
-          </div>
-        </div>
-      </UserProfileComp>
-    );
-  };
-};
 
+          <button
+            type="button"
+            onClick={handleFollowUnfollow}
+            className="follow-unfollow-btn"
+          >
+            {isFollowed ? "Unfollow" : "Follow"}
+          </button>
+        </div>
+      </div>
+      <div className="border"></div>
+      <div className="books">
+        <div className="row">
+          <Title>
+            <h2>Liked books</h2>
+          </Title>
+          {likedBooks.map((book, index) => {
+            console.log(book);
+            if (book.volumeInfo.imageLinks === undefined ? false : true) {
+              return (
+                <Fragment key={index}>
+                  <BookCard book={book} />
+                </Fragment>
+              );
+            }
+          })}
+        </div>
+        <div className="row">
+          <Title>
+            <h2>Feedbacks</h2>
+          </Title>
+          {location.state.feedbacks.map((comObj, index) => {
+            return <Comment comObj={comObj} key={index} />;
+          })}
+        </div>
+      </div>
+    </UserProfileComp>
+  );
+};
 export default Profile;
 
 const UserProfileComp = styled.div`
