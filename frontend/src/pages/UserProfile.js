@@ -4,7 +4,7 @@ import styled from "styled-components";
 import HoverModal from "../components/HoverModal";
 import { useAppContext } from "../context/appContext";
 import image from "../images/loginpagebook.png";
-import { useAppContext } from "../context/appContext"; 
+
 import BookCard from "./BookCard";
 const UserProfile = () => {
   const { setUserIDandToken, user } = useAppContext();

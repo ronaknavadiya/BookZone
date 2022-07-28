@@ -7,7 +7,8 @@ import { useLocation } from "react-router-dom";
 import BookCard from "../pages/BookCard";
 const Profile = () => {
     const location=useLocation();
-console.log(location) ; 
+  // console.log(location) ; 
+const [recmbook, setrecmbook] = useState([]);
 const [likedBooks, setLikedBooks] = useState([]);
 const [frienduser, setfrienduser] = useState({});
   const [isFollowed, setIsFollowed] = useState(false);
