@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState, Fragment } from "react";
 import styled from "styled-components";
 import HoverModal from "../components/HoverModal";
+import { useAppContext } from "../context/appContext";
 import image from "../images/loginpagebook.png";
 import { useAppContext } from "../context/appContext"; 
 import BookCard from "./BookCard";
@@ -109,6 +110,7 @@ const fetchuser=async ()=>{
           handleShow={handleShow}
           modalHeader={modalHeader}
           modalData={modalData}
+          user={user}
         />
       )}
       <div className="info-image-container col-md-12">
@@ -211,26 +213,26 @@ const UserProfileComp = styled.div`
     margin-bottom: 2rem;
     text-align: -webkit-center;
   }
-    .follow-unfollow-btn {
-      border-radius: 4px;
-      background: var(--blue);
-      padding: 10px 22px;
-      color: #fff;
-      border: none;
-      outline: none;
-      cursor: pointer;
+  .follow-unfollow-btn {
+    border-radius: 4px;
+    background: var(--blue);
+    padding: 10px 22px;
+    color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    &:hover {
       transition: all 0.2s ease-in-out;
-      text-decoration: none;
-      font-size: 1.5rem;
-      margin-top: 2rem;
-      &:hover {
-        transition: all 0.2s ease-in-out;
-        background: #fff;
-        color: #010606;
-        border: 1px solid var(--blue);
-      }
+      background: #fff;
+      color: #010606;
+      border: 1px solid var(--blue);
     }
-  
+  }
+
   .hovermodal {
     position: absolute;
     top: 0;

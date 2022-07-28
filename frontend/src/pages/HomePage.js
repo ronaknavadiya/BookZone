@@ -6,8 +6,7 @@ import styled from "styled-components";
 import { useAppContext } from "../context/appContext";
 import "../css/Home.css";
 import BookCard from "./BookCard";
-import UserProfile from "../components/Userprofile";
-
+import UserProfile from "../components/ProfileComp";
 const HomePage = () => {
   const { setUserIDandToken, user } = useAppContext();
   // console.log("my user", user);
@@ -270,16 +269,20 @@ const HomePage = () => {
             <Title>
               <h2>Book suggested by genres you selected</h2>
             </Title>
-            {recmbook.map((book, index) => {
-              if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                const bool=verifylikebook1(book);
-                return (
-                  <Fragment key={index}>
-                    <BookCard book={book} hearted={bool?'hearted':'unhearted'} user={user} />
-                  </Fragment>
-                );
-              }
-            })}
+            {recmbook.length > 0 ? (
+              recmbook.map((book, index) => {
+                if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                  const bool=verifylikebook1(book);
+                  return (
+                    <Fragment key={index}>
+                      <BookCard book={book} hearted={bool?'hearted':'unhearted'} user={user} />
+                    </Fragment>
+                  );
+                }
+              })
+            ) : (
+              <h1>"No Book Found !!"</h1>
+            )}
           </div>
         </div>
       )}
@@ -289,16 +292,20 @@ const HomePage = () => {
             <Title>
               <h2>Book suggested by book you liked</h2>
             </Title>
-            {recmbook.map((book, index) => {
-              if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                const bool=verifylikebook1(book);
-                return (
-                  <Fragment key={index}>
-                    <BookCard book={book}  hearted={bool?'hearted':'unhearted'}user={user} />
-                  </Fragment>
-                );
-              }
-            })}
+            {recmbook.length > 0 ? (
+              recmbook.map((book, index) => {
+                if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                  const bool=verifylikebook1(book);
+                  return (
+                    <Fragment key={index}>
+                      <BookCard book={book}  hearted={bool?'hearted':'unhearted'}user={user} />
+                    </Fragment>
+                  );
+                }
+              })
+            ) : (
+              <h1>"No Book Found !!"</h1>
+            )}
           </div>
         </div>
       )}
@@ -308,7 +315,7 @@ const HomePage = () => {
             <Title>
               <h2>Book suggested by people you follow</h2>
             </Title>
-            {recmbook &&
+            {recmbook.length > 0 ? (
               recmbook.map((book, index) => {
                 if (book.volumeInfo.imageLinks === undefined ? false : true) {
                   const bool=verifylikebook1(book);
@@ -318,7 +325,10 @@ const HomePage = () => {
                     </Fragment>
                   );
                 }
-              })}
+              })
+            ) : (
+              <h1>"No Book Found !!"</h1>
+            )}
           </div>
         </div>
       )}
@@ -327,6 +337,7 @@ const HomePage = () => {
           {recmuser.map((eachuser, index) => {
             return (
               <UserProfile
+                key={index}
                 eachuser={eachuser}
                 onClick={userprofile}
               ></UserProfile>

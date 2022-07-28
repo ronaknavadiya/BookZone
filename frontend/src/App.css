@@ -96,7 +96,23 @@ color: white;
 .modal-content{
   height: 300px !important;
 }
-.modal-body{
-  height: 20px;
-  width: 20px;
+.user-block-modal{
+	display: flex;
+		flex-direction: row;
+		/* justify-content: center; */
+		padding: 2rem;
+		align-items: center;
+		width: 32rem;
+		border: 1px solid gray;
+		cursor: pointer;
+	
+}
+.user-modal-image {
+	border: 1px solid gray;
+		width: 35px;
+		margin-right: 2rem;
+		border-radius: 16px;
+}
+.user-name-modal{
+	font-size: 2rem;
 }
