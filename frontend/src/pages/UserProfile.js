@@ -1,18 +1,19 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import styled from "styled-components";
 import HoverModal from "../components/HoverModal";
 import { useAppContext } from "../context/appContext";
 import image from "../images/loginpagebook.png";
 
+import BookCard from "./BookCard";
 const UserProfile = () => {
+  const { setUserIDandToken, user } = useAppContext();
   const [likedBooks, setLikedBooks] = useState([]);
+  const [frienduser, setfrienduser] = useState({});
   const [isFollowed, setIsFollowed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({});
   const [modalHeader, setModalHeader] = useState("Modal Header");
-  const { user } = useAppContext();
-
   const handleFollowUnfollow = () => {};
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -28,20 +29,76 @@ const UserProfile = () => {
     setModalHeader("Followings");
   };
 
-  useEffect(() => {
-    fetchLikedBooks();
+  useEffect( () => {
+  const fetchData =   async()=>{
+      await fetchuser(); 
+      // console.log("fri..",frienduser);
+    }
+    fetchData()
   }, []);
 
+  useEffect(()=>{
+    
+    const fetchData =   async()=>{
+      await fetchLikedBooks(); 
+      // console.log("fri..",frienduser);
+    }
+    fetchData()
+  },[frienduser])
+
+const fetchuser=async ()=>{
+  let us="";
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/v1/user/frienduser",{
+        userId:user._id
+      }
+    );
+    // const jsonuser=JSON.stringify
+    // (res.data);
+  // setfrienduser(jsonuser);
+  console.log("data...",res.data);
+  setfrienduser(res.data)
+  
+     } catch(e){
+    console.log(e);
+  }
+  // const k=[];
+  //   console.log(frienduser)
+  //     for( let i in us.likedBooks) {
+  //       try{
+  //       const res = await axios.get(
+  //         `https://www.googleapis.com/books/v1/volumes?q=subject:${us.likedBooks[i]}`
+  //       );
+  //         k.push(res.data)
+      
+  //     setLikedBooks(k);
+  //     console.log(likedBooks);
+  //   } catch (error) {
+  //     console.log("Error: ", error);
+  //   }
+  // }
+  }
+    
   const fetchLikedBooks = async () => {
-    try {
-      const res = await axios.get(
-        "https://www.googleapis.com/books/v1/volumes?q=subject:fiction"
-      );
-      console.log(res.data.items);
-      setLikedBooks(res.data.items);
+   let k=[];
+   console.log(frienduser);
+      for( let i in frienduser.likedBooks) {
+        console.log(frienduser.likedBooks[i]);
+        let title = frienduser.likedBooks[i];
+        try{
+        const res = await axios.get(
+          `${title}`
+        );
+  
+          k.push(res.data);
     } catch (error) {
       console.log("Error: ", error);
     }
+    
+  }
+  setLikedBooks(k);
+    console.log(k);
   };
   return (
     <UserProfileComp>
@@ -65,7 +122,7 @@ const UserProfile = () => {
           />
         </div>
         <div className="info-container col-md-8">
-          <h2 className="username">Ronak Navadiya</h2>
+          <h2 className="username">{user.userName}</h2>
           <div className="user-info-details">
             <div className="liked-books">
               <h4>40</h4>
@@ -91,18 +148,23 @@ const UserProfile = () => {
           </button>
         </div>
       </div>
-      <div className="border"></div>
-      <h2 style={{ marginTop: "2rem" }}>Liked Books..</h2>
-      <div className="books-galary">
-        {likedBooks.map((book, index) => {
-          return (
-            <div key={index}>
-              <img src={book.volumeInfo.imageLinks.thumbnail} alt="" />
-              <h4>{book.volumeInfo.title}</h4>
-            </div>
-          );
-        })}
-      </div>
+      <div className="books">
+          <div className="row">
+            <Title>
+              <h2>Liked books</h2>
+            </Title>
+            {likedBooks.map((book, index) => {
+              console.log(book);
+              if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                return (
+                  <Fragment key={index}>
+                    <BookCard book={book} hearted={"hearted"} />
+                  </Fragment>
+                );
+              }
+            })}
+          </div>
+        </div>
     </UserProfileComp>
   );
 };
@@ -174,5 +236,12 @@ const UserProfileComp = styled.div`
   .hovermodal {
     position: absolute;
     top: 0;
+  }
+`; 
+const Title = styled.div`
+  margin: 25px 0px;
+  color: rgba(27, 79, 114);
+  h2 {
+    font-size: 22px;
   }
 `;
