@@ -5,6 +5,8 @@ import HoverModal from "../components/HoverModal";
 import image from "../images/loginpagebook.png";
 import { useLocation } from "react-router-dom";
 import BookCard from "../pages/BookCard";
+import { toast, ToastContainer } from "react-toastify";
+import { useAppContext } from "../context/appContext";
 const Profile = () => {
     const location=useLocation();
   // console.log(location) ; 
@@ -15,10 +17,26 @@ const [frienduser, setfrienduser] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({});
   const [modalHeader, setModalHeader] = useState("Modal Header");
+  const { user, followUnfollowUser } = useAppContext();
 
-  const handleFollowUnfollow = () => {};
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+
+  const handleFollowUnfollow = async () => {
+    try {
+      const res = await axios.put(
+        "http://localhost:5000/api/v1/user/followUnfollow",
+        {
+          userId: user._id,
+          friendUserId: location.state._id,
+        }
+      );
+      toast(res.data);
+      followUnfollowUser(location.state._id);
+    } catch (error) {
+      toast(error.response.data.message);
+    }
+  };
 
   const showFollowersModal = () => {
     handleShow();
@@ -103,6 +121,7 @@ const [frienduser, setfrienduser] = useState({});
       };
   return (
     <UserProfileComp>
+      <ToastContainer theme="dark" />
       {showModal && (
         <HoverModal
           className="hovermodal"
