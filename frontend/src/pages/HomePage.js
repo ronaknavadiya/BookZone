@@ -18,9 +18,35 @@ const HomePage = () => {
   const [recmuser, setrecuser] = useState([]);
   const [usertoggle, setusertoggle] = useState(false);
   const [usererror, setusererror] = useState("");
+  const [likeRecommendation, setLikeRecommendation] = useState([]);
   const userprofile = (e) => {
     // navigate
   };
+
+  const getBookBasedOnTitle = async (title) => {
+    try {
+      const res = await axios.get(
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${title}`
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const getRecommandedBooks = async (title) => {
+    try {
+      const res = await axios.post("http://localhost:5000/recommend_books", {
+        title: title,
+      });
+      console.log(res.data[0]);
+      setLikeRecommendation(res.data[0]);
+      getBookBasedOnTitle(title);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   const searching = async (e) => {
     setusererror("");
     if (searchcat.current.value == "author") {
@@ -106,7 +132,7 @@ const HomePage = () => {
           );
 
           // Object.assign({...k,res.data.items});
-          console.log(res.data.items.length);
+          console.log(res.data?.items?.length);
           for (let j in res.data.items) {
             // if(count==0){
             //   break;
@@ -134,6 +160,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchrecmbook();
+    getRecommandedBooks("1984");
   }, []);
   useEffect(() => {
     if (user) {
