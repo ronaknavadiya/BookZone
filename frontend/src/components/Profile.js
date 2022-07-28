@@ -119,6 +119,7 @@ const [frienduser, setfrienduser] = useState({});
       setLikedBooks(k);
         console.log(k);
       };
+      console.log(likedBooks);
   return (
     <UserProfileComp>
       <ToastContainer theme="dark" />
@@ -174,7 +175,8 @@ const [frienduser, setfrienduser] = useState({});
           <Title>
             <h2>Liked books</h2>
           </Title>
-          {recmbook.map((book, index) => {
+          {likedBooks.map((book, index) => {
+          console.log(book);
             if (book.volumeInfo.imageLinks === undefined ? false : true) {
               return (
                 <Fragment key={index}>
