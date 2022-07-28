@@ -29,75 +29,71 @@ const UserProfile = () => {
     setModalHeader("Followings");
   };
 
-  useEffect( () => {
-  const fetchData =   async()=>{
-      await fetchuser(); 
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchuser();
       // console.log("fri..",frienduser);
-    }
-    fetchData()
+    };
+    fetchData();
   }, []);
 
-  useEffect(()=>{
-    
-    const fetchData =   async()=>{
-      await fetchLikedBooks(); 
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchLikedBooks();
       // console.log("fri..",frienduser);
-    }
-    fetchData()
-  },[frienduser])
+    };
+    fetchData();
+  }, [frienduser]);
 
-const fetchuser=async ()=>{
-  let us="";
-  try {
-    const res = await axios.post(
-      "http://localhost:5000/api/v1/user/frienduser",{
-        userId:user._id
-      }
-    );
-    // const jsonuser=JSON.stringify
-    // (res.data);
-  // setfrienduser(jsonuser);
-  console.log("data...",res.data);
-  setfrienduser(res.data)
-  
-     } catch(e){
-    console.log(e);
-  }
-  // const k=[];
-  //   console.log(frienduser)
-  //     for( let i in us.likedBooks) {
-  //       try{
-  //       const res = await axios.get(
-  //         `https://www.googleapis.com/books/v1/volumes?q=subject:${us.likedBooks[i]}`
-  //       );
-  //         k.push(res.data)
-      
-  //     setLikedBooks(k);
-  //     console.log(likedBooks);
-  //   } catch (error) {
-  //     console.log("Error: ", error);
-  //   }
-  // }
-  }
-    
-  const fetchLikedBooks = async () => {
-   let k=[];
-   console.log(frienduser);
-      for( let i in frienduser.likedBooks) {
-        console.log(frienduser.likedBooks[i]);
-        let title = frienduser.likedBooks[i];
-        try{
-        const res = await axios.get(
-          `${title}`
-        );
-  
-          k.push(res.data);
-    } catch (error) {
-      console.log("Error: ", error);
+  const fetchuser = async () => {
+    let us = "";
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/user/frienduser",
+        {
+          userId: user._id,
+        }
+      );
+      // const jsonuser=JSON.stringify
+      // (res.data);
+      // setfrienduser(jsonuser);
+      console.log("data...", res.data);
+      setfrienduser(res.data);
+    } catch (e) {
+      console.log(e);
     }
-    
-  }
-  setLikedBooks(k);
+    // const k=[];
+    //   console.log(frienduser)
+    //     for( let i in us.likedBooks) {
+    //       try{
+    //       const res = await axios.get(
+    //         `https://www.googleapis.com/books/v1/volumes?q=subject:${us.likedBooks[i]}`
+    //       );
+    //         k.push(res.data)
+
+    //     setLikedBooks(k);
+    //     console.log(likedBooks);
+    //   } catch (error) {
+    //     console.log("Error: ", error);
+    //   }
+    // }
+  };
+
+  const fetchLikedBooks = async () => {
+    let k = [];
+    console.log(frienduser);
+    for (let i in frienduser.likedBooks) {
+      console.log(frienduser.likedBooks[i]);
+      let title = frienduser.likedBooks[i];
+      try {
+        const res = await axios.get(`${title}`);
+
+        k.push(res.data);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    }
+    setLikedBooks(k);
     console.log(k);
   };
   return (
@@ -125,46 +121,46 @@ const fetchuser=async ()=>{
           <h2 className="username">{user.userName}</h2>
           <div className="user-info-details">
             <div className="liked-books">
-              <h4>40</h4>
+              <h4>{likedBooks.length}</h4>
               <h5>Liked Books</h5>
             </div>
             <div className="followers" onClick={showFollowersModal}>
-              <h4>40</h4>
+              <h4>{user.followers.length}</h4>
               <h5>Followers</h5>
             </div>
 
             <div className="followings" onClick={showFollowingsModal}>
-              <h4>40</h4>
+              <h4>{user.following.length}</h4>
               <h5>Followings</h5>
             </div>
           </div>
 
-          <button
+          {/* <button
             type="button"
             onClick={handleFollowUnfollow}
             className="follow-unfollow-btn"
           >
             {isFollowed ? "Unfollow" : "Follow"}
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="books">
-          <div className="row">
-            <Title>
-              <h2>Liked books</h2>
-            </Title>
-            {likedBooks.map((book, index) => {
-              console.log(book);
-              if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                return (
-                  <Fragment key={index}>
-                    <BookCard book={book} hearted={"hearted"} />
-                  </Fragment>
-                );
-              }
-            })}
-          </div>
+        <div className="row">
+          <Title>
+            <h2>Liked books</h2>
+          </Title>
+          {likedBooks.map((book, index) => {
+            console.log(book);
+            if (book.volumeInfo.imageLinks === undefined ? false : true) {
+              return (
+                <Fragment key={index}>
+                  <BookCard book={book} hearted={"hearted"} />
+                </Fragment>
+              );
+            }
+          })}
         </div>
+      </div>
     </UserProfileComp>
   );
 };
@@ -237,7 +233,7 @@ const UserProfileComp = styled.div`
     position: absolute;
     top: 0;
   }
-`; 
+`;
 const Title = styled.div`
   margin: 25px 0px;
   color: rgba(27, 79, 114);
