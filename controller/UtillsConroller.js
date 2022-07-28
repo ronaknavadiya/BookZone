@@ -85,4 +85,40 @@ const getSpecificUser = async (req, res) => {
   }
 };
 
-module.exports = { AddFavGenre, LikeBooks, getSpecificUser };
+const postFeedback = async (req, res) => {
+  const { userId, book, comment } = req.body;
+  try {
+    const curreentuser = await Users.findById(userId);
+
+    if (curreentuser) {
+      const comObj = {
+        book: book,
+        comment: comment,
+      };
+
+      const newCom = curreentuser.feedbacks.push(comObj);
+
+      await Users.findByIdAndUpdate(
+        userId,
+        { feedbacks: newCom },
+        (err, data) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json(err.message);
+          }
+        }
+      )
+        .clone()
+        .catch(function (err) {
+          console.log(err);
+        });
+
+      res.status(200).json(curreentuser);
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+    return res.status(500).json(error.message);
+  }
+};
+
+module.exports = { AddFavGenre, LikeBooks, getSpecificUser, postFeedback };

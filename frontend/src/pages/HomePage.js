@@ -365,29 +365,31 @@ const HomePage = () => {
       )}
       {!usertoggle && (
         <div className="books">
-          <div className="row">
-            <Title>
-              <h2>Books suggested by book you Previously Searched</h2>
-            </Title>
-            {recmdBooksBasedOnSearch.length > 0 ? (
-              recmdBooksBasedOnSearch.map((book, index) => {
-                if (book.volumeInfo.imageLinks === undefined ? false : true) {
-                  const bool = verifylikebook1(book);
-                  return (
-                    <Fragment key={index}>
-                      <BookCard
-                        book={book}
-                        hearted={bool ? "hearted" : "unhearted"}
-                        user={user}
-                      />
-                    </Fragment>
-                  );
-                }
-              })
-            ) : (
-              <h1>"No Book Found !!"</h1>
-            )}
-          </div>
+          {recmdBooksBasedOnSearch.length > 0 && (
+            <div className="row">
+              <Title>
+                <h2>Books suggested by book you Previously Searched</h2>
+              </Title>
+              {recmdBooksBasedOnSearch.length > 0 ? (
+                recmdBooksBasedOnSearch.map((book, index) => {
+                  if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                    const bool = verifylikebook1(book);
+                    return (
+                      <Fragment key={index}>
+                        <BookCard
+                          book={book}
+                          hearted={bool ? "hearted" : "unhearted"}
+                          user={user}
+                        />
+                      </Fragment>
+                    );
+                  }
+                })
+              ) : (
+                <h1>"No Book Found !!"</h1>
+              )}
+            </div>
+          )}
         </div>
       )}
       {!usertoggle && (

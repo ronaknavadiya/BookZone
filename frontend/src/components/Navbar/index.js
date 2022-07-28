@@ -50,12 +50,12 @@ const Navbar = () => {
             <NavLink to="/profile" activestyle="true">
               My Profile
             </NavLink>
-            <NavLink to="/login" activestyle="true">
+            {/* <NavLink to="/login" activestyle="true">
               Log In
             </NavLink>
             <NavLink to="/signup" activestyle="true">
               Sign Up
-            </NavLink>
+            </NavLink> */}
             {/* Second Nav */}
             {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
           </NavMenu>
