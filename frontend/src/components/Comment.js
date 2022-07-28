@@ -1,14 +1,19 @@
 import React from 'react'
 import styled from 'styled-components' 
-const comment = () => {
+import { useAppContext } from '../context/appContext';
+const comment = ({user}) => {
+
   return (
 <>
     <Mainwrapper>
     <Bookdiv>
-            <h3>XYZ:</h3>
+        <ImgWrapper>
+            <img src={user.profilePicture}></img>
+            </ImgWrapper>
+            <h3>Fucker:</h3>
         </Bookdiv>
         <CommentWrapper>
-        <h3>asndsa fnbas fbas b sbd asghvasv jasvfhjabdykjk</h3>
+        <h3>Tari gand loda feedback wali nni</h3>
         </CommentWrapper>
       
     </Mainwrapper>
@@ -24,9 +29,12 @@ h3{
 `;
 const Bookdiv=styled.div`
 
-
+display: flex;
+align-items: center;
 h3{
     margin-left: 15px;
+    color: var(--blue);
+    margin-bottom: 5px;
 }
 `;
 const Mainwrapper=styled.div`
@@ -34,6 +42,18 @@ display: flex;
 flex-direction:column ;
 margin: 30px 10px;
 padding:15px;
-box-shadow:2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+box-shadow: 10px 10px 10px rgba( 0, 0, 0, 0.2);
+border-radius: 20px;
+            
 `;
+const ImgWrapper=styled.div`
+width:50px;
+height: 50px;
+border-radius: 50%;
+img{
+    width: 100%;
+    height:100%;
+    object-fit: cover;
+}
+`
 export default comment;

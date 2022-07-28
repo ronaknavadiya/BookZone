@@ -182,7 +182,7 @@ const UserProfile = () => {
             </div>
           </div>
         </div>
-        <Comment />
+        <Comment user={user}/>
       </div>
     </UserProfileComp>
   );
