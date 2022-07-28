@@ -8,8 +8,8 @@ import BookCard from "../pages/BookCard";
 const Profile = () => {
     const location=useLocation();
 console.log(location) ; 
-const [recmbook, setrecmbook] = useState([]);
-  const [likedBooks, setLikedBooks] = useState([]);
+const [likedBooks, setLikedBooks] = useState([]);
+const [frienduser, setfrienduser] = useState({});
   const [isFollowed, setIsFollowed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({});
@@ -30,21 +30,76 @@ const [recmbook, setrecmbook] = useState([]);
     setModalHeader("Followings");
   };
 
-  useEffect(() => {
-    fetchLikedBooks();
-  }, []);
-
-  const fetchLikedBooks = async () => {
-    try {
-      const res = await axios.get(
-        "https://www.googleapis.com/books/v1/volumes?q=subject:fiction"
-      );
+  useEffect( () => {
+    const fetchData =   async()=>{
+        await fetchuser(); 
+        // console.log("fri..",frienduser);
+      }
+      fetchData()
+    }, []);
+  
+    useEffect(()=>{
       
-      setrecmbook(res.data.items);
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-  };
+      const fetchData =   async()=>{
+        await fetchLikedBooks(); 
+        // console.log("fri..",frienduser);
+      }
+      fetchData()
+    },[frienduser]);
+    const fetchuser=async ()=>{
+      let us="";
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/v1/user/frienduser",{
+            userId:location.state._id
+          }
+        );
+        // const jsonuser=JSON.stringify
+        // (res.data);
+      // setfrienduser(jsonuser);
+      console.log("data...",res.data);
+      setfrienduser(res.data)
+      
+         } catch(e){
+        console.log(e);
+      }
+      // const k=[];
+      //   console.log(frienduser)
+      //     for( let i in us.likedBooks) {
+      //       try{
+      //       const res = await axios.get(
+      //         `https://www.googleapis.com/books/v1/volumes?q=subject:${us.likedBooks[i]}`
+      //       );
+      //         k.push(res.data)
+          
+      //     setLikedBooks(k);
+      //     console.log(likedBooks);
+      //   } catch (error) {
+      //     console.log("Error: ", error);
+      //   }
+      // }
+      }
+        
+      const fetchLikedBooks = async () => {
+       let k=[];
+       console.log(frienduser);
+          for( let i in frienduser.likedBooks) {
+            console.log(frienduser.likedBooks[i]);
+            let title = frienduser.likedBooks[i];
+            try{
+            const res = await axios.get(
+              `${title}`
+            );
+      
+              k.push(res.data);
+        } catch (error) {
+          console.log("Error: ", error);
+        }
+        
+      }
+      setLikedBooks(k);
+        console.log(k);
+      };
   return (
     <UserProfileComp>
       {showModal && (
@@ -99,11 +154,11 @@ const [recmbook, setrecmbook] = useState([]);
             <Title>
               <h2>Liked books</h2>
             </Title>
-            {recmbook.map((book, index) => {
+            {likedBooks.map((book, index) => {
               if (book.volumeInfo.imageLinks === undefined ? false : true) {
                 return (
                   <Fragment key={index}>
-                    <BookCard book={book} />
+                    <BookCard book={book}  />
                   </Fragment>
                 );
               }

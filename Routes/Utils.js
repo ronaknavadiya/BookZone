@@ -16,6 +16,6 @@ router.route("/usersearch").post(UserController);
 router.route("/followUnfollow").put(followUnfollowUser);
 router.route("/favGenre").post(AddFavGenre);
 router.route("/likeBook").put(LikeBooks);
-router.route("/friendUser").get(getSpecificUser);
+router.route("/friendUser").post(getSpecificUser);
 
 module.exports = router;

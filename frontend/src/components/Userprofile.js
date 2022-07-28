@@ -11,6 +11,7 @@ function Userprofile({eachuser}) {
     console.log(eachuser);
       navigate('/userprofile',{state:eachuser});
     }
+    
   return (
     <div onClick={userprofile}>
         <Maincontainer >
