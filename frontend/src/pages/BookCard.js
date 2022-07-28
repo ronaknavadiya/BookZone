@@ -1,14 +1,43 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import styled  from "styled-components";
+import { useAppContext } from "../context/appContext";  
+import axios from "axios";
 const BookCard = (book) => {
+  const { setUserIDandToken, user } = useAppContext();
+  const [isLiked, setIsLiked] = useState(false)
+
 const [heart,setheart]=useState(false);
-const heartclick=()=>{
-  setheart(!heart);
-  
-  console.log(heart);
+
+useEffect(()=>{
+  setheart(book.hearted=='hearted'?true:false);
+},[])
+
+
+
+const heartclick=async()=>{
+  try{
+   
+  const res = await axios.put("http://localhost:5000/api/v1/user/likeBook", {
+        userId:user._id,
+        selfLink:book.book.selfLink
+      });
+     
+      if( res.data=="Book has been Unliked..." ){
+        console.log(false);
+      setheart(false);
+      }
+      if(res.data=="Book has been liked..."){
+        console.log(true);
+        setheart(true);
+      }
+    }
+    catch(e){
+      console.log(e)
+    }
+ 
 }
   return (  
     <div className="col-md-3 col-sm-4">
