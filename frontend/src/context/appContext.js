@@ -1,6 +1,14 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer, useContext, useEffect } from "react";
 import reducer from "./reducer";
-import { DISPLAY_ALERT, CONFIGUIRE_USER, LOG_OUT, ADD_GENRE } from "./actions";
+import {
+  DISPLAY_ALERT,
+  CONFIGUIRE_USER,
+  LOG_OUT,
+  ADD_GENRE,
+  UNFOLLLOW_USER,
+  FOLLLOW_USER,
+} from "./actions";
+import axios from "axios";
 
 const token = localStorage.getItem("token");
 let user = localStorage.getItem("user");
@@ -50,6 +58,15 @@ const AppProvider = ({ children }) => {
     removeUserFromLocalStorage();
   };
 
+  const followUnfollowUser = (frinedUserId) => {
+    if (user?.following?.includes(frinedUserId)) {
+      dispatch({ type: UNFOLLLOW_USER, payload: { user, frinedUserId } });
+    } else {
+      dispatch({ type: FOLLLOW_USER, payload: { user, frinedUserId } });
+    }
+    console.log("user....", user);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -58,6 +75,7 @@ const AppProvider = ({ children }) => {
         setUserIDandToken,
         logout,
         addFavGenreInStorage,
+        followUnfollowUser,
       }}
     >
       {children}
