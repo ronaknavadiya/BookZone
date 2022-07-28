@@ -367,7 +367,7 @@ const HomePage = () => {
         <div className="books">
           <div className="row">
             <Title>
-              <h2>Books suggested by book you Searched</h2>
+              <h2>Books suggested by book you Previously Searched</h2>
             </Title>
             {recmdBooksBasedOnSearch.length > 0 ? (
               recmdBooksBasedOnSearch.map((book, index) => {
