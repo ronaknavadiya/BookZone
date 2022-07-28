@@ -1,31 +1,25 @@
-import React from 'react'
-import styled from 'styled-components' 
-import { useAppContext } from '../context/appContext';
-const comment = ({user}) => {
-
+import React from "react";
+import styled from "styled-components";
+const comment = ({ comObj,user }) => {
   return (
-<>
-    <Mainwrapper>
-    <Bookdiv>
-        <ImgWrapper>
-            <img src={user.profilePicture}></img>
-            </ImgWrapper>
-            <h3>Fucker:</h3>
+    <>
+      <Mainwrapper>
+        <Bookdiv>
+          <h3>{comObj.book}</h3>
         </Bookdiv>
         <CommentWrapper>
-        <h3>Tari gand loda feedback wali nni</h3>
+          <h3>{comObj.comment}</h3>
         </CommentWrapper>
-      
-    </Mainwrapper>
+      </Mainwrapper>
     </>
   );
-}
-const CommentWrapper=styled.div`
-width:70%;
+};
+const CommentWrapper = styled.div`
+  width: 70%;
 
-h3{
+  h3 {
     margin-left: 20px;
-}
+  }
 `;
 const Bookdiv=styled.div`
 

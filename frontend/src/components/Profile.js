@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import BookCard from "../pages/BookCard";
 import { toast, ToastContainer } from "react-toastify";
 import { useAppContext } from "../context/appContext";
+import Comment from "./Comment";
 
 const Profile = () => {
   const location = useLocation();
@@ -114,9 +115,10 @@ const Profile = () => {
         console.log("Error: ", error);
       }
       setLikedBooks(k);
-        console.log(k);
-      };
-      console.log(likedBooks);
+      console.log(k);
+    }
+    console.log(likedBooks);
+  };
   return (
     <UserProfileComp>
       <ToastContainer theme="dark" />
@@ -166,14 +168,13 @@ const Profile = () => {
         </div>
       </div>
       <div className="border"></div>
-
       <div className="books">
         <div className="row">
           <Title>
             <h2>Liked books</h2>
           </Title>
           {likedBooks.map((book, index) => {
-          console.log(book);
+            console.log(book);
             if (book.volumeInfo.imageLinks === undefined ? false : true) {
               return (
                 <Fragment key={index}>
@@ -183,11 +184,18 @@ const Profile = () => {
             }
           })}
         </div>
+        <div className="row">
+          <Title>
+            <h2>Feedbacks</h2>
+          </Title>
+          {location.state.feedbacks.map((comObj, index) => {
+            return <Comment comObj={comObj} key={index} />;
+          })}
+        </div>
       </div>
     </UserProfileComp>
   );
-}}
-
+};
 export default Profile;
 
 const UserProfileComp = styled.div`

@@ -87,7 +87,7 @@ const AppProvider = ({ children }) => {
         }
       );
       console.log("app context user", res.data);
-      // setLatestUser(res.data);
+      setLatestUser(res.data);
       ModifyUser(res.data);
     } catch (error) {
       console.log("Error:", error);
@@ -103,7 +103,8 @@ const AppProvider = ({ children }) => {
         logout,
         addFavGenreInStorage,
         followUnfollowUser,
-        // latestUser,
+        latestUser,
+        setLatestUser,
       }}
     >
       {children}
