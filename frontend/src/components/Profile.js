@@ -113,78 +113,79 @@ const Profile = () => {
         console.log("Error: ", error);
       }
       setLikedBooks(k);
-        console.log(k);
-      };
-      console.log(likedBooks);
-  return (
-    <UserProfileComp>
-      <ToastContainer theme="dark" />
-      {showModal && (
-        <HoverModal
-          className="hovermodal"
-          showModal={showModal}
-          handleClose={handleClose}
-          handleShow={handleShow}
-          modalHeader={modalHeader}
-          modalData={modalData}
-        />
-      )}
-      <div className="info-image-container col-md-12">
-        <div className="col-md-1">
-          <img
-            src={location.state.profilePicture}
-            alt="userimage"
-            className="userImage"
+      console.log(k);
+    }
+    console.log(likedBooks);
+    return (
+      <UserProfileComp>
+        <ToastContainer theme="dark" />
+        {showModal && (
+          <HoverModal
+            className="hovermodal"
+            showModal={showModal}
+            handleClose={handleClose}
+            handleShow={handleShow}
+            modalHeader={modalHeader}
+            modalData={modalData}
           />
-        </div>
-        <div className="info-container col-md-8">
-          <h2 className="username">{location.state.userName}</h2>
-          <div className="user-info-details">
-            <div className="liked-books">
-              <h4>{location.state.likedBooks.length}</h4>
-              <h5>Liked Books</h5>
-            </div>
-            <div className="followers" onClick={showFollowersModal}>
-              <h4>{location.state.followers.length}</h4>
-              <h5>Followers</h5>
-            </div>
-
-            <div className="followings" onClick={showFollowingsModal}>
-              <h4>{location.state.following.length}</h4>
-              <h5>Followings</h5>
-            </div>
+        )}
+        <div className="info-image-container col-md-12">
+          <div className="col-md-1">
+            <img
+              src={location.state.profilePicture}
+              alt="userimage"
+              className="userImage"
+            />
           </div>
+          <div className="info-container col-md-8">
+            <h2 className="username">{location.state.userName}</h2>
+            <div className="user-info-details">
+              <div className="liked-books">
+                <h4>{location.state.likedBooks.length}</h4>
+                <h5>Liked Books</h5>
+              </div>
+              <div className="followers" onClick={showFollowersModal}>
+                <h4>{location.state.followers.length}</h4>
+                <h5>Followers</h5>
+              </div>
 
-          <button
-            type="button"
-            onClick={handleFollowUnfollow}
-            className="follow-unfollow-btn"
-          >
-            {isFollowed ? "Unfollow" : "Follow"}
-          </button>
-        </div>
-      </div>
-      <div className="border"></div>
+              <div className="followings" onClick={showFollowingsModal}>
+                <h4>{location.state.following.length}</h4>
+                <h5>Followings</h5>
+              </div>
+            </div>
 
-      <div className="books">
-        <div className="row">
-          <Title>
-            <h2>Liked books</h2>
-          </Title>
-          {likedBooks.map((book, index) => {
-          console.log(book);
-            if (book.volumeInfo.imageLinks === undefined ? false : true) {
-              return (
-                <Fragment key={index}>
-                  <BookCard book={book} />
-                </Fragment>
-              );
-            }
-          })}
+            <button
+              type="button"
+              onClick={handleFollowUnfollow}
+              className="follow-unfollow-btn"
+            >
+              {isFollowed ? "Unfollow" : "Follow"}
+            </button>
+          </div>
         </div>
-      </div>
-    </UserProfileComp>
-  );
+        <div className="border"></div>
+
+        <div className="books">
+          <div className="row">
+            <Title>
+              <h2>Liked books</h2>
+            </Title>
+            {likedBooks.map((book, index) => {
+              console.log(book);
+              if (book.volumeInfo.imageLinks === undefined ? false : true) {
+                return (
+                  <Fragment key={index}>
+                    <BookCard book={book} />
+                  </Fragment>
+                );
+              }
+            })}
+          </div>
+        </div>
+      </UserProfileComp>
+    );
+  };
 };
 
 export default Profile;
