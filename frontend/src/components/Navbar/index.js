@@ -9,6 +9,7 @@ import {
   NavBtnLink,
 } from "./NavbarElements";
 import logo from "../../images/bookzonelogo.png";
+import newLogo from "../../images/logobookzone.png";
 import { useAppContext } from "../../context/appContext";
 import styled from 'styled-components';
 const Navbar = () => {
@@ -40,10 +41,9 @@ const Navbar = () => {
         <Nav>
           <NavLink to="/">
             <Logowrapper>
-            {/* <img src={logo} alt="logo" /> */}
-            <img src={logo} alt="logo" />
+              {/* <img src={logo} alt="logo" /> */}
+              <img src={newLogo} alt="logo" />
             </Logowrapper>
-           
           </NavLink>
           <Bars />
           <NavMenu>
@@ -73,7 +73,7 @@ const Logowrapper=styled.div`
 width:60px;
 height:60px;
 img{
-  width:100%;
+  width:250%;
   height:100%;
   object-fit: cover;
 }
