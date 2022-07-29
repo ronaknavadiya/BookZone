@@ -184,14 +184,17 @@ const Profile = () => {
             }
           })}
         </div>
-        <div className="row">
-          <Title>
-            <h2>Feedbacks</h2>
-          </Title>
-          {location.state.feedbacks.map((comObj, index) => {
-            return <Comment comObj={comObj} key={index} />;
-          })}
-        </div>
+        {location.state && (
+          <div className="row">
+            <Title>
+              <h2>Feedbacks</h2>
+            </Title>
+            {console.log("I am her", location.state)}
+            {location.state?.feedbacks.map((comObj, index) => {
+              return <Comment comObj={comObj} key={index} user={location?.state} />;
+            })}
+          </div>
+        )}
       </div>
     </UserProfileComp>
   );

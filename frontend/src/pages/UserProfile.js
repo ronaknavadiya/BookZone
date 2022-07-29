@@ -115,6 +115,8 @@ const UserProfile = () => {
       );
       console.log("res..", res.data);
       setLatestUser(res.data);
+      commentInout.current.value = "";
+      bookNameInput.current.value = "";
     } catch (error) {
       console.log("Error:", error);
     }
@@ -208,10 +210,10 @@ const UserProfile = () => {
         </div>
         {latestUser
           ? latestUser.feedbacks.map((comObj, index) => {
-              return <Comment comObj={comObj} key={index} />;
+              return <Comment comObj={comObj} key={index} user={user} />;
             })
           : user.feedbacks?.map((comObj, index) => {
-              return <Comment comObj={comObj} key={index} />;
+              return <Comment comObj={comObj} key={index} user={user} />;
             })}
       </div>
     </UserProfileComp>
