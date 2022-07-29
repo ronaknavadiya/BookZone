@@ -178,7 +178,7 @@ const Profile = () => {
             if (book.volumeInfo.imageLinks === undefined ? false : true) {
               return (
                 <Fragment key={index}>
-                  <BookCard book={book} />
+                  <BookCard book={book} isotherUser={true}/>
                 </Fragment>
               );
             }
