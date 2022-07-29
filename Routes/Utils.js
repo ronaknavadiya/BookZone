@@ -5,11 +5,19 @@ const {
   AddFavGenre,
   LikeBooks,
   getSpecificUser,
+  postFeedback,
 } = require("../controller/UtillsConroller");
 
+const {UserController}=require("../controller/UserProfileController");;
+
+
+
+
+router.route("/usersearch").post(UserController);
 router.route("/followUnfollow").put(followUnfollowUser);
 router.route("/favGenre").post(AddFavGenre);
 router.route("/likeBook").put(LikeBooks);
-router.route("/friendUser").get(getSpecificUser);
+router.route("/friendUser").post(getSpecificUser);
+router.route("/feedback").post(postFeedback)
 
 module.exports = router;

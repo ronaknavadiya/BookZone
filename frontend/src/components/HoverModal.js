@@ -31,11 +31,14 @@ const HoverModal = ({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoBmbGrzGWJD45wxc2hXS1g8sf2d8MwP3ddw&usqp=CAU"
-            alt="User image"
-          />
-          <h4>username</h4>
+          <div className="user-block-modal">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoBmbGrzGWJD45wxc2hXS1g8sf2d8MwP3ddw&usqp=CAU"
+              alt="User image"
+              className="user-modal-image"
+            />
+            <h4 className="user-name-modal">username</h4>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleClose}>Close</Button>
@@ -45,13 +48,6 @@ const HoverModal = ({
   );
 };
 
-const HoverModalComp = styled.div`
-  .modal-body {
-    img {
-      width: 20px;
-      height: 20px;
-    }
-  }
-`;
+const HoverModalComp = styled.div``;
 
 export default HoverModal;

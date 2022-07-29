@@ -8,9 +8,10 @@ import {
   NavBtn,
   NavBtnLink,
 } from "./NavbarElements";
-import logo from "../../images/logo.png";
+import logo from "../../images/bookzonelogo.png";
+import newLogo from "../../images/logobookzone.png";
 import { useAppContext } from "../../context/appContext";
-
+import styled from 'styled-components';
 const Navbar = () => {
   const { logout , user } = useAppContext();
 
@@ -39,20 +40,22 @@ const Navbar = () => {
       {user && (
         <Nav>
           <NavLink to="/">
-            {/* <img src={logo} alt="logo" /> */}
-            Logo
+            <Logowrapper>
+              {/* <img src={logo} alt="logo" /> */}
+              <img src={newLogo} alt="logo" />
+            </Logowrapper>
           </NavLink>
           <Bars />
           <NavMenu>
             <NavLink to="/profile" activestyle="true">
               My Profile
             </NavLink>
-            <NavLink to="/login" activestyle="true">
+            {/* <NavLink to="/login" activestyle="true">
               Log In
             </NavLink>
             <NavLink to="/signup" activestyle="true">
               Sign Up
-            </NavLink>
+            </NavLink> */}
             {/* Second Nav */}
             {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
           </NavMenu>
@@ -66,5 +69,13 @@ const Navbar = () => {
     </>
   );
 };
-
+const Logowrapper=styled.div`
+width:60px;
+height:60px;
+img{
+  width:250%;
+  height:100%;
+  object-fit: cover;
+}
+`
 export default Navbar;

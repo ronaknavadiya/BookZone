@@ -1,9 +1,19 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer, useContext, useEffect, useState } from "react";
 import reducer from "./reducer";
-import { DISPLAY_ALERT, CONFIGUIRE_USER, LOG_OUT } from "./actions";
+import {
+  DISPLAY_ALERT,
+  CONFIGUIRE_USER,
+  LOG_OUT,
+  ADD_GENRE,
+  UNFOLLLOW_USER,
+  FOLLLOW_USER,
+  CONFIGUIRE_LATEST_USER,
+} from "./actions";
+import axios from "axios";
 
 const token = localStorage.getItem("token");
-const user = localStorage.getItem("user");
+let user = localStorage.getItem("user");
+user = JSON.parse(user);
 const userLocation = localStorage.getItem("location");
 
 const intialState = {
@@ -17,6 +27,12 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, intialState);
+
+  const [latestUser, setLatestUser] = useState({});
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const clearAlert = () => {
     dispatch({ type: DISPLAY_ALERT });
@@ -34,6 +50,9 @@ const AppProvider = ({ children }) => {
     localStorage.removeItem("location");
   };
 
+  const addFavGenreInStorage = (genre) => {
+    dispatch({ type: ADD_GENRE, payload: { genre } });
+  };
   const setUserIDandToken = (jwtToken, user, location) => {
     // console.log(jwtToken, user);
 
@@ -41,14 +60,52 @@ const AppProvider = ({ children }) => {
     addUserToLocalStorage({ user, jwtToken, location });
   };
 
+  const ModifyUser = (user) => {
+    dispatch({ type: CONFIGUIRE_LATEST_USER, payload: { user } });
+  };
+
   const logout = () => {
     dispatch({ type: LOG_OUT });
     removeUserFromLocalStorage();
   };
 
+  const followUnfollowUser = (frinedUserId) => {
+    if (user?.following?.includes(frinedUserId)) {
+      dispatch({ type: UNFOLLLOW_USER, payload: { user, frinedUserId } });
+    } else {
+      dispatch({ type: FOLLLOW_USER, payload: { user, frinedUserId } });
+    }
+    console.log("user....", user);
+  };
+
+  const fetchUser = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/user/frienduser",
+        {
+          userId: user._id,
+        }
+      );
+      console.log("app context user", res.data);
+      setLatestUser(res.data);
+      ModifyUser(res.data);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   return (
     <AppContext.Provider
-      value={{ ...state, clearAlert, setUserIDandToken, logout }}
+      value={{
+        ...state,
+        clearAlert,
+        setUserIDandToken,
+        logout,
+        addFavGenreInStorage,
+        followUnfollowUser,
+        latestUser,
+        setLatestUser,
+      }}
     >
       {children}
     </AppContext.Provider>

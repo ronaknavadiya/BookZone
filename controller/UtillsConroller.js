@@ -17,7 +17,11 @@ const AddFavGenre = async (req, res) => {
         console.log(err);
         return res.status(500).json(err.message);
       }
-    });
+    })
+      .clone()
+      .catch(function (err) {
+        console.log(err);
+      });
     return res.status(200).send("Favourite genre has been saved...");
   } catch (error) {
     console.log("Error: ", error);
@@ -27,22 +31,22 @@ const AddFavGenre = async (req, res) => {
 
 const LikeBooks = async (req, res) => {
   try {
-    const { userId, bookId } = req.body;
-    console.log(userId, bookId);
+    const { userId, selfLink } = req.body;
+
     const currentUser = await Users.findById(userId);
     if (!currentUser) {
       return res.status(400).send("Not able to find user");
     }
-    console.log("user:", currentUser);
+    // console.log("user:", currentUser);
     currentUser.likedBooks = currentUser.likedBooks;
-    console.log(currentUser.likedBooks);
+    // console.log(currentUser.likedBooks);
     let msg = "";
-    if (currentUser.likedBooks.includes(bookId)) {
-      let newArray = currentUser.likedBooks.filter((val) => val !== bookId);
+    if (currentUser.likedBooks.includes(selfLink)) {
+      let newArray = currentUser.likedBooks.filter((val) => val !== selfLink);
       currentUser.likedBooks = newArray;
       msg = "Book has been Unliked...";
     } else {
-      currentUser.likedBooks.push(bookId);
+      currentUser.likedBooks.push(selfLink);
       msg = "Book has been liked...";
     }
     await Users.findByIdAndUpdate(
@@ -68,17 +72,53 @@ const LikeBooks = async (req, res) => {
 
 const getSpecificUser = async (req, res) => {
   const { userId } = req.body;
-  console.log(userId);
+  // console.log(req.body);
   try {
     const curreentuser = await Users.findById(userId);
     if (curreentuser) {
       delete curreentuser.password;
     }
-    return res.status(200).send(curreentuser);
+    return res.status(200).json(curreentuser);
   } catch (error) {
     console.log("Error: ", error);
     return res.status(500).json(error.message);
   }
 };
 
-module.exports = { AddFavGenre, LikeBooks, getSpecificUser };
+const postFeedback = async (req, res) => {
+  const { userId, book, comment } = req.body;
+  try {
+    const curreentuser = await Users.findById(userId);
+
+    if (curreentuser) {
+      const comObj = {
+        book: book,
+        comment: comment,
+      };
+
+      curreentuser.feedbacks.push(comObj);
+
+      await Users.findByIdAndUpdate(
+        userId,
+        { feedbacks: curreentuser.feedbacks },
+        (err, data) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json(err.message);
+          }
+        }
+      )
+        .clone()
+        .catch(function (err) {
+          console.log(err);
+        });
+
+      res.status(200).json(curreentuser);
+    }
+  } catch (error) {
+    console.log("Error: ", error);
+    return res.status(500).json(error.message);
+  }
+};
+
+module.exports = { AddFavGenre, LikeBooks, getSpecificUser, postFeedback };

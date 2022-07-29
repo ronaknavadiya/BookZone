@@ -11,7 +11,12 @@ const getUser = async (req, res) => {
         .status(400)
         .json({ sucess: false, message: "Please provide all values.." });
     }
-    const candidateUser = await Users.findOne({ email }).select("+password");
+    const candidateUser = await Users.findOne({ email })
+      .select("+password")
+      .clone()
+      .catch(function (err) {
+        console.log(err);
+      });
     if (!candidateUser) {
       return res.status(400).json({
         sucess: "false",
@@ -52,7 +57,11 @@ const createtUser = async (req, res) => {
       .json({ sucess: "false", message: "please provide all values" });
   }
 
-  const isUserAlreadyExists = await Users.findOne({ email });
+  const isUserAlreadyExists = await Users.findOne({ email })
+    .clone()
+    .catch(function (err) {
+      console.log(err);
+    });
   if (isUserAlreadyExists) {
     return res.status(400).json({
       sucess: "false",
@@ -75,8 +84,8 @@ const createtUser = async (req, res) => {
 
 const followUnfollowUser = async (req, res) => {
   try {
-    const { userId } = req.body;
-    const { friendUserId } = req.query;
+    const { userId, friendUserId } = req.body;
+    // const { friendUserId } = req.query;
 
     const user = await Users.findById(userId);
     const friendUser = await Users.findById(friendUserId);
@@ -109,7 +118,11 @@ const followUnfollowUser = async (req, res) => {
           return res.status(500).json(err.message);
         }
       }
-    );
+    )
+      .clone()
+      .catch(function (err) {
+        console.log(err);
+      });
 
     await Users.findByIdAndUpdate(
       friendUserId,
@@ -120,7 +133,11 @@ const followUnfollowUser = async (req, res) => {
           return res.status(500).json(err.message);
         }
       }
-    );
+    )
+      .clone()
+      .catch(function (err) {
+        console.log(err);
+      });
 
     return res.status(200).send(msg);
   } catch (error) {

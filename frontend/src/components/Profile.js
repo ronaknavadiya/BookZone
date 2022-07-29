@@ -1,26 +1,44 @@
 import axios from "axios";
-import React, { useEffect, useState, Fragment, useRef } from "react";
+import React, { useEffect, useState, useRef, Fragment } from "react";
 import styled from "styled-components";
 import HoverModal from "../components/HoverModal";
-import { useAppContext } from "../context/appContext";
 import image from "../images/loginpagebook.png";
-import Comment from "../components/Comment";
-import BookCard from "./BookCard";
-const UserProfile = () => {
-  const { setUserIDandToken, user } = useAppContext();
+import { useLocation } from "react-router-dom";
+import BookCard from "../pages/BookCard";
+import { toast, ToastContainer } from "react-toastify";
+import { useAppContext } from "../context/appContext";
+import Comment from "./Comment";
+
+const Profile = () => {
+  const location = useLocation();
+  // console.log(location) ;
+  const [recmbook, setrecmbook] = useState([]);
   const [likedBooks, setLikedBooks] = useState([]);
   const [frienduser, setfrienduser] = useState({});
   const [isFollowed, setIsFollowed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState({});
   const [modalHeader, setModalHeader] = useState("Modal Header");
-  const bookNameInput = useRef();
-  const commentInout = useRef();
-  const [latestUser, setLatestUser] = useState();
+  const { user, followUnfollowUser } = useAppContext();
 
-  const handleFollowUnfollow = () => {};
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+
+  const handleFollowUnfollow = async () => {
+    try {
+      const res = await axios.put(
+        "http://localhost:5000/api/v1/user/followUnfollow",
+        {
+          userId: user._id,
+          friendUserId: location.state._id,
+        }
+      );
+      toast(res.data);
+      followUnfollowUser(location.state._id);
+    } catch (error) {
+      toast(error.response.data.message);
+    }
+  };
 
   const showFollowersModal = () => {
     handleShow();
@@ -55,7 +73,7 @@ const UserProfile = () => {
       const res = await axios.post(
         "http://localhost:5000/api/v1/user/frienduser",
         {
-          userId: user._id,
+          userId: location.state._id,
         }
       );
       // const jsonuser=JSON.stringify
@@ -96,34 +114,14 @@ const UserProfile = () => {
       } catch (error) {
         console.log("Error: ", error);
       }
+      setLikedBooks(k);
+      console.log(k);
     }
-    setLikedBooks(k);
-    console.log(k);
+    console.log(likedBooks);
   };
-
-  const postFeedback = async () => {
-    const comObj = {
-      comment: commentInout.current.value,
-      book: bookNameInput.current.value,
-      userId: user._id,
-    };
-
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/v1/user/feedback",
-        comObj
-      );
-      console.log("res..", res.data);
-      setLatestUser(res.data);
-      commentInout.current.value = "";
-      bookNameInput.current.value = "";
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
-
   return (
     <UserProfileComp>
+      <ToastContainer theme="dark" />
       {showModal && (
         <HoverModal
           className="hovermodal"
@@ -132,44 +130,44 @@ const UserProfile = () => {
           handleShow={handleShow}
           modalHeader={modalHeader}
           modalData={modalData}
-          user={user}
         />
       )}
       <div className="info-image-container col-md-12">
         <div className="col-md-1">
           <img
-            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1000&q=60"
+            src={location.state.profilePicture}
             alt="userimage"
             className="userImage"
           />
         </div>
         <div className="info-container col-md-8">
-          <h2 className="username">{user.userName}</h2>
+          <h2 className="username">{location.state.userName}</h2>
           <div className="user-info-details">
             <div className="liked-books">
-              <h4>{likedBooks.length}</h4>
+              <h4>{location.state.likedBooks.length}</h4>
               <h5>Liked Books</h5>
             </div>
             <div className="followers" onClick={showFollowersModal}>
-              <h4>{user.followers.length}</h4>
+              <h4>{location.state.followers.length}</h4>
               <h5>Followers</h5>
             </div>
 
             <div className="followings" onClick={showFollowingsModal}>
-              <h4>{user.following.length}</h4>
+              <h4>{location.state.following.length}</h4>
               <h5>Followings</h5>
             </div>
           </div>
 
-          {/* <button
+          <button
             type="button"
             onClick={handleFollowUnfollow}
             className="follow-unfollow-btn"
           >
             {isFollowed ? "Unfollow" : "Follow"}
-          </button> */}
+          </button>
         </div>
       </div>
+      <div className="border"></div>
       <div className="books">
         <div className="row">
           <Title>
@@ -180,47 +178,28 @@ const UserProfile = () => {
             if (book.volumeInfo.imageLinks === undefined ? false : true) {
               return (
                 <Fragment key={index}>
-                  <BookCard book={book} hearted={"hearted"} />
+                  <BookCard book={book} isotherUser={true}/>
                 </Fragment>
               );
             }
           })}
         </div>
-        <div className="row">
-          <Title>
-            <h2>Feedbacks</h2>
-          </Title>
-          <div className="col-8">
-            <div className="input-group">
-              <h3 className=".mytext">Book:</h3>
-              <input type="text" className="form-control" ref={bookNameInput} />
-              <h3 className=".mytext">Comment:</h3>
-              <input type="text" className="form-control" ref={commentInout} />
-              <div className="input-group-append">
-                <button
-                  className="btn searchbtn "
-                  type="button"
-                  onClick={() => postFeedback()}
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        {latestUser
-          ? latestUser.feedbacks.map((comObj, index) => {
-              return <Comment comObj={comObj} key={index} user={user} />;
-            })
-          : user.feedbacks?.map((comObj, index) => {
-              return <Comment comObj={comObj} key={index} user={user} />;
+        {location.state && (
+          <div className="row">
+            <Title>
+              <h2>Feedbacks</h2>
+            </Title>
+            {console.log("I am her", location.state)}
+            {location.state?.feedbacks.map((comObj, index) => {
+              return <Comment comObj={comObj} key={index} user={location?.state} />;
             })}
+          </div>
+        )}
       </div>
     </UserProfileComp>
   );
 };
-
-export default UserProfile;
+export default Profile;
 
 const UserProfileComp = styled.div`
   .info-image-container {
@@ -287,17 +266,6 @@ const UserProfileComp = styled.div`
   .hovermodal {
     position: absolute;
     top: 0;
-  }
-  .books {
-    .row {
-      h3 {
-        margin: 1rem;
-      }
-      input {
-        margin-right: 1rem;
-        font-size: 2rem;
-      }
-    }
   }
 `;
 const Title = styled.div`
